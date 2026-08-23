@@ -8,6 +8,7 @@ from sgg_benchmark.structures.box_ops import box_convert
 from sgg_benchmark.utils.miscellaneous import argsort_desc
 
 def do_sgg_evaluation(cfg, dataset, dataset_name, predictions, output_folder, logger, iou_types, informative=False, **kwargs):
+    result_dict = {}
     metrics_to_eval = {'relations': ['recall', 'mean_recall', 'f1_score', 'zeroshot_recall'], 'bbox': ['mAP']}
     if cfg.test.informative: metrics_to_eval['relations'].append('informative_recall')
 
@@ -54,10 +55,10 @@ def do_sgg_evaluation(cfg, dataset, dataset_name, predictions, output_folder, lo
     result_str = '\n' + '=' * 100 + '\n'
     if "bbox" in iou_types:
         mAp = evaluate_detection(dataset, predictions, groundtruths, mode, logger)
+        result_dict[f"{mode}_bbox_mAP"] = float(mAp)
         result_str += f'Detection evaluation mAp={mAp:.4f}\n' + '=' * 100 + '\n'
 
     if "relations" in iou_types:
-        result_dict = {}
         evaluators = {}
         for k, v in metrics_to_eval.items():
             if "zeroshot" in k:
@@ -89,7 +90,7 @@ def do_sgg_evaluation(cfg, dataset, dataset_name, predictions, output_folder, lo
     logger.info(result_str)
     if output_folder:
         save_results(output_folder, result_dict, dataset_name, mode, cfg)
-    return result_dict if "relations" in iou_types else {}
+    return result_dict
 
 def evaluate_detection(dataset, predictions, groundtruths, mode, logger):
     anns = []
@@ -171,4 +172,3 @@ def save_results(output_folder, result_dict, dataset_name, mode, cfg):
                         val = result_dict[f'{mode}_{m}'][k]
                         res[f'{mode}_{m}@{k}'] = float(np.mean(val)) if isinstance(val, list) else float(val)
             with open(res_file, 'w') as f: json.dump(res, f)
-

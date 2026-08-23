@@ -1,9 +1,23 @@
-# Scene Graph Benchmark in Pytorch
+# Scene Graph Benchmark in PyTorch & Human Preference Alignment (RLHP)
 
-[![LICENSE](https://img.shields.io/badge/license-MIT-green)](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch/blob/master/LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
-![PyTorch](https://img.shields.io/badge/pytorch-2.2.1-%237732a8)
-[![arXiv](https://img.shields.io/badge/arXiv-2405.16116-b31b1b.svg)](https://arxiv.org/abs/2603.06386)
+[![LICENSE](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/pytorch-2.2.1-%237732a8)](https://pytorch.org/)
+[![Paper PDF](https://img.shields.io/badge/report-PDF-red)](scene_graph_tool/report/main.pdf)
+
+---
+
+## 🌟 [NEW] Human Preference Alignment & Active Learning Toolkit (`scene_graph_tool`)
+
+This repository now includes **Human Preference Alignment for Two-Stage Scene Graph Generation (YOLO12m-REACT++ on PSG)**:
+- 🖥️ **Interactive Labeler GUI (`scene_graph_tool/server.py`)**: React + FastAPI active uncertainty-guided annotation workspace.
+- 🎯 **Tripartite RLHP Objective**: Fine-tunes predicate classification using Bradley-Terry preference loss + masked KL retention + prototype anchoring.
+- 📊 **PSG Benchmark Evaluation**: Improves test mR@50 (+0.57%), mR@100 (+0.41%), and F1@50 (+0.36%) while strictly preserving Stage 1 bbox mAP (56.57%).
+- 📄 **Publication Report**: Full 9-page research paper with LaTeX sources and PDF in [`scene_graph_tool/report/`](scene_graph_tool/report/).
+
+👉 **See [`scene_graph_tool/README.md`](scene_graph_tool/README.md) for full documentation, GUI quickstart, and training instructions.**
+
+---
 
 ## [Under Review] Code for the paper [REACT++: Efficient Cross-Attention for Real-Time Scene Graph Generation](https://arxiv.org/abs/2603.06386)
 
@@ -322,6 +336,15 @@ See the [REACT++ Quick Start](#react-quick-start) section for full training/eval
 
 If you find this project helps your research, please kindly consider citing our project or papers in your publications.
 
+
+```
+@article{phan2026humanpref_sgg,
+  title={Human Preference Alignment for Two-Stage Scene Graph Generation: YOLO12m-REACT++ on Panoptic Scene Graphs},
+  author={Phan, Quoc Anh},
+  institution={Vision \& Language Navigation Team, VinRobotics},
+  year={2026}
+}
+```
 
 ```
 @misc{neau2026reactplusplus,

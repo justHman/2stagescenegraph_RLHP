@@ -496,6 +496,11 @@ class REACTPlusPlusPredictor(BasePredictor):
         # Inference-only caches (invalidated whenever we enter training mode)
         # These avoid re-projecting the same frozen embeddings on every forward.
         self._cache_valid = False
+        # RLHP keeps the detector in eval mode to disable dropout/EMA updates,
+        # but its preference loss still needs a differentiable prototype branch.
+        # When enabled, bypass the detached inference cache without switching the
+        # whole detector to train mode.
+        self.preference_forward = False
 
     # ── helpers ───────────────────────────────────────────────────────────────
 
@@ -505,13 +510,22 @@ class REACTPlusPlusPredictor(BasePredictor):
             self._cache_valid = False
         return super().train(mode)
 
+    def set_preference_forward(self, enabled: bool = True):
+        """Enable eval-mode forwards with gradients through projected prototypes."""
+        enabled = bool(enabled)
+        if enabled != self.preference_forward:
+            self._cache_valid = False
+        self.preference_forward = enabled
+
     def _get_cached_protos(self):
         """Return (obj_proto_kv, pred_proto_kv, protos_norm, protos_proj) from cache or compute.
 
-        protos_proj is only non-None during training (needed for REACT losses).
-        At inference the cache returns protos_proj=None to skip the recompute.
+        protos_proj is non-None during regular training and preference-forward.
+        Ordinary inference caches detached projections and returns
+        protos_proj=None to skip the recompute.
         """
-        if not self.training and self._cache_valid:
+        use_inference_cache = not self.training and not self.preference_forward
+        if use_inference_cache and self._cache_valid:
             return self._c_obj_proto_kv, self._c_pred_proto_kv, self._c_protos_norm, None
 
         obj_proto_kv  = self.obj_lift(self.obj_embed.weight)          # [C_obj, D]
@@ -523,11 +537,14 @@ class REACTPlusPlusPredictor(BasePredictor):
         # prototype's L2 norm underflows to zero in fp16.
         protos_norm   = F.normalize(protos_proj.float(), dim=-1).to(protos_proj.dtype)  # [C_rel, D]
 
-        if not self.training:
+        if use_inference_cache:
             self._c_obj_proto_kv  = obj_proto_kv.detach()
             self._c_pred_proto_kv = pred_proto_kv.detach() if pred_proto_kv is not None else None
             self._c_protos_norm   = protos_norm.detach()
             self._cache_valid     = True
+            obj_proto_kv          = self._c_obj_proto_kv
+            pred_proto_kv         = self._c_pred_proto_kv
+            protos_norm           = self._c_protos_norm
             protos_proj           = None   # not needed at inference
 
         return obj_proto_kv, pred_proto_kv, protos_norm, protos_proj

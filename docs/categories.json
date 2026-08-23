@@ -1,0 +1,951 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "person",
+      "supercategory": "none"
+    },
+    {
+      "id": 2,
+      "name": "bicycle",
+      "supercategory": "none"
+    },
+    {
+      "id": 3,
+      "name": "car",
+      "supercategory": "none"
+    },
+    {
+      "id": 4,
+      "name": "motorcycle",
+      "supercategory": "none"
+    },
+    {
+      "id": 5,
+      "name": "airplane",
+      "supercategory": "none"
+    },
+    {
+      "id": 6,
+      "name": "bus",
+      "supercategory": "none"
+    },
+    {
+      "id": 7,
+      "name": "train",
+      "supercategory": "none"
+    },
+    {
+      "id": 8,
+      "name": "truck",
+      "supercategory": "none"
+    },
+    {
+      "id": 9,
+      "name": "boat",
+      "supercategory": "none"
+    },
+    {
+      "id": 10,
+      "name": "traffic light",
+      "supercategory": "none"
+    },
+    {
+      "id": 11,
+      "name": "fire hydrant",
+      "supercategory": "none"
+    },
+    {
+      "id": 12,
+      "name": "stop sign",
+      "supercategory": "none"
+    },
+    {
+      "id": 13,
+      "name": "parking meter",
+      "supercategory": "none"
+    },
+    {
+      "id": 14,
+      "name": "bench",
+      "supercategory": "none"
+    },
+    {
+      "id": 15,
+      "name": "bird",
+      "supercategory": "none"
+    },
+    {
+      "id": 16,
+      "name": "cat",
+      "supercategory": "none"
+    },
+    {
+      "id": 17,
+      "name": "dog",
+      "supercategory": "none"
+    },
+    {
+      "id": 18,
+      "name": "horse",
+      "supercategory": "none"
+    },
+    {
+      "id": 19,
+      "name": "sheep",
+      "supercategory": "none"
+    },
+    {
+      "id": 20,
+      "name": "cow",
+      "supercategory": "none"
+    },
+    {
+      "id": 21,
+      "name": "elephant",
+      "supercategory": "none"
+    },
+    {
+      "id": 22,
+      "name": "bear",
+      "supercategory": "none"
+    },
+    {
+      "id": 23,
+      "name": "zebra",
+      "supercategory": "none"
+    },
+    {
+      "id": 24,
+      "name": "giraffe",
+      "supercategory": "none"
+    },
+    {
+      "id": 25,
+      "name": "backpack",
+      "supercategory": "none"
+    },
+    {
+      "id": 26,
+      "name": "umbrella",
+      "supercategory": "none"
+    },
+    {
+      "id": 27,
+      "name": "handbag",
+      "supercategory": "none"
+    },
+    {
+      "id": 28,
+      "name": "tie",
+      "supercategory": "none"
+    },
+    {
+      "id": 29,
+      "name": "suitcase",
+      "supercategory": "none"
+    },
+    {
+      "id": 30,
+      "name": "frisbee",
+      "supercategory": "none"
+    },
+    {
+      "id": 31,
+      "name": "skis",
+      "supercategory": "none"
+    },
+    {
+      "id": 32,
+      "name": "snowboard",
+      "supercategory": "none"
+    },
+    {
+      "id": 33,
+      "name": "sports ball",
+      "supercategory": "none"
+    },
+    {
+      "id": 34,
+      "name": "kite",
+      "supercategory": "none"
+    },
+    {
+      "id": 35,
+      "name": "baseball bat",
+      "supercategory": "none"
+    },
+    {
+      "id": 36,
+      "name": "baseball glove",
+      "supercategory": "none"
+    },
+    {
+      "id": 37,
+      "name": "skateboard",
+      "supercategory": "none"
+    },
+    {
+      "id": 38,
+      "name": "surfboard",
+      "supercategory": "none"
+    },
+    {
+      "id": 39,
+      "name": "tennis racket",
+      "supercategory": "none"
+    },
+    {
+      "id": 40,
+      "name": "bottle",
+      "supercategory": "none"
+    },
+    {
+      "id": 41,
+      "name": "wine glass",
+      "supercategory": "none"
+    },
+    {
+      "id": 42,
+      "name": "cup",
+      "supercategory": "none"
+    },
+    {
+      "id": 43,
+      "name": "fork",
+      "supercategory": "none"
+    },
+    {
+      "id": 44,
+      "name": "knife",
+      "supercategory": "none"
+    },
+    {
+      "id": 45,
+      "name": "spoon",
+      "supercategory": "none"
+    },
+    {
+      "id": 46,
+      "name": "bowl",
+      "supercategory": "none"
+    },
+    {
+      "id": 47,
+      "name": "banana",
+      "supercategory": "none"
+    },
+    {
+      "id": 48,
+      "name": "apple",
+      "supercategory": "none"
+    },
+    {
+      "id": 49,
+      "name": "sandwich",
+      "supercategory": "none"
+    },
+    {
+      "id": 50,
+      "name": "orange",
+      "supercategory": "none"
+    },
+    {
+      "id": 51,
+      "name": "broccoli",
+      "supercategory": "none"
+    },
+    {
+      "id": 52,
+      "name": "carrot",
+      "supercategory": "none"
+    },
+    {
+      "id": 53,
+      "name": "hot dog",
+      "supercategory": "none"
+    },
+    {
+      "id": 54,
+      "name": "pizza",
+      "supercategory": "none"
+    },
+    {
+      "id": 55,
+      "name": "donut",
+      "supercategory": "none"
+    },
+    {
+      "id": 56,
+      "name": "cake",
+      "supercategory": "none"
+    },
+    {
+      "id": 57,
+      "name": "chair",
+      "supercategory": "none"
+    },
+    {
+      "id": 58,
+      "name": "couch",
+      "supercategory": "none"
+    },
+    {
+      "id": 59,
+      "name": "potted plant",
+      "supercategory": "none"
+    },
+    {
+      "id": 60,
+      "name": "bed",
+      "supercategory": "none"
+    },
+    {
+      "id": 61,
+      "name": "dining table",
+      "supercategory": "none"
+    },
+    {
+      "id": 62,
+      "name": "toilet",
+      "supercategory": "none"
+    },
+    {
+      "id": 63,
+      "name": "tv",
+      "supercategory": "none"
+    },
+    {
+      "id": 64,
+      "name": "laptop",
+      "supercategory": "none"
+    },
+    {
+      "id": 65,
+      "name": "mouse",
+      "supercategory": "none"
+    },
+    {
+      "id": 66,
+      "name": "remote",
+      "supercategory": "none"
+    },
+    {
+      "id": 67,
+      "name": "keyboard",
+      "supercategory": "none"
+    },
+    {
+      "id": 68,
+      "name": "cell phone",
+      "supercategory": "none"
+    },
+    {
+      "id": 69,
+      "name": "microwave",
+      "supercategory": "none"
+    },
+    {
+      "id": 70,
+      "name": "oven",
+      "supercategory": "none"
+    },
+    {
+      "id": 71,
+      "name": "toaster",
+      "supercategory": "none"
+    },
+    {
+      "id": 72,
+      "name": "sink",
+      "supercategory": "none"
+    },
+    {
+      "id": 73,
+      "name": "refrigerator",
+      "supercategory": "none"
+    },
+    {
+      "id": 74,
+      "name": "book",
+      "supercategory": "none"
+    },
+    {
+      "id": 75,
+      "name": "clock",
+      "supercategory": "none"
+    },
+    {
+      "id": 76,
+      "name": "vase",
+      "supercategory": "none"
+    },
+    {
+      "id": 77,
+      "name": "scissors",
+      "supercategory": "none"
+    },
+    {
+      "id": 78,
+      "name": "teddy bear",
+      "supercategory": "none"
+    },
+    {
+      "id": 79,
+      "name": "hair drier",
+      "supercategory": "none"
+    },
+    {
+      "id": 80,
+      "name": "toothbrush",
+      "supercategory": "none"
+    },
+    {
+      "id": 81,
+      "name": "banner",
+      "supercategory": "none"
+    },
+    {
+      "id": 82,
+      "name": "blanket",
+      "supercategory": "none"
+    },
+    {
+      "id": 83,
+      "name": "bridge",
+      "supercategory": "none"
+    },
+    {
+      "id": 84,
+      "name": "cardboard",
+      "supercategory": "none"
+    },
+    {
+      "id": 85,
+      "name": "counter",
+      "supercategory": "none"
+    },
+    {
+      "id": 86,
+      "name": "curtain",
+      "supercategory": "none"
+    },
+    {
+      "id": 87,
+      "name": "door",
+      "supercategory": "none"
+    },
+    {
+      "id": 88,
+      "name": "floor-wood",
+      "supercategory": "none"
+    },
+    {
+      "id": 89,
+      "name": "flower",
+      "supercategory": "none"
+    },
+    {
+      "id": 90,
+      "name": "fruit",
+      "supercategory": "none"
+    },
+    {
+      "id": 91,
+      "name": "gravel",
+      "supercategory": "none"
+    },
+    {
+      "id": 92,
+      "name": "house",
+      "supercategory": "none"
+    },
+    {
+      "id": 93,
+      "name": "light",
+      "supercategory": "none"
+    },
+    {
+      "id": 94,
+      "name": "mirror",
+      "supercategory": "none"
+    },
+    {
+      "id": 95,
+      "name": "net",
+      "supercategory": "none"
+    },
+    {
+      "id": 96,
+      "name": "pillow",
+      "supercategory": "none"
+    },
+    {
+      "id": 97,
+      "name": "platform",
+      "supercategory": "none"
+    },
+    {
+      "id": 98,
+      "name": "playingfield",
+      "supercategory": "none"
+    },
+    {
+      "id": 99,
+      "name": "railroad",
+      "supercategory": "none"
+    },
+    {
+      "id": 100,
+      "name": "river",
+      "supercategory": "none"
+    },
+    {
+      "id": 101,
+      "name": "road",
+      "supercategory": "none"
+    },
+    {
+      "id": 102,
+      "name": "roof",
+      "supercategory": "none"
+    },
+    {
+      "id": 103,
+      "name": "sand",
+      "supercategory": "none"
+    },
+    {
+      "id": 104,
+      "name": "sea",
+      "supercategory": "none"
+    },
+    {
+      "id": 105,
+      "name": "shelf",
+      "supercategory": "none"
+    },
+    {
+      "id": 106,
+      "name": "snow",
+      "supercategory": "none"
+    },
+    {
+      "id": 107,
+      "name": "stairs",
+      "supercategory": "none"
+    },
+    {
+      "id": 108,
+      "name": "tent",
+      "supercategory": "none"
+    },
+    {
+      "id": 109,
+      "name": "towel",
+      "supercategory": "none"
+    },
+    {
+      "id": 110,
+      "name": "wall-brick",
+      "supercategory": "none"
+    },
+    {
+      "id": 111,
+      "name": "wall-stone",
+      "supercategory": "none"
+    },
+    {
+      "id": 112,
+      "name": "wall-tile",
+      "supercategory": "none"
+    },
+    {
+      "id": 113,
+      "name": "wall-wood",
+      "supercategory": "none"
+    },
+    {
+      "id": 114,
+      "name": "water",
+      "supercategory": "none"
+    },
+    {
+      "id": 115,
+      "name": "window-blind",
+      "supercategory": "none"
+    },
+    {
+      "id": 116,
+      "name": "window",
+      "supercategory": "none"
+    },
+    {
+      "id": 117,
+      "name": "tree",
+      "supercategory": "none"
+    },
+    {
+      "id": 118,
+      "name": "fence",
+      "supercategory": "none"
+    },
+    {
+      "id": 119,
+      "name": "ceiling",
+      "supercategory": "none"
+    },
+    {
+      "id": 120,
+      "name": "sky",
+      "supercategory": "none"
+    },
+    {
+      "id": 121,
+      "name": "cabinet",
+      "supercategory": "none"
+    },
+    {
+      "id": 122,
+      "name": "table",
+      "supercategory": "none"
+    },
+    {
+      "id": 123,
+      "name": "floor",
+      "supercategory": "none"
+    },
+    {
+      "id": 124,
+      "name": "pavement",
+      "supercategory": "none"
+    },
+    {
+      "id": 125,
+      "name": "mountain",
+      "supercategory": "none"
+    },
+    {
+      "id": 126,
+      "name": "grass",
+      "supercategory": "none"
+    },
+    {
+      "id": 127,
+      "name": "dirt",
+      "supercategory": "none"
+    },
+    {
+      "id": 128,
+      "name": "paper",
+      "supercategory": "none"
+    },
+    {
+      "id": 129,
+      "name": "food",
+      "supercategory": "none"
+    },
+    {
+      "id": 130,
+      "name": "building",
+      "supercategory": "none"
+    },
+    {
+      "id": 131,
+      "name": "rock",
+      "supercategory": "none"
+    },
+    {
+      "id": 132,
+      "name": "wall",
+      "supercategory": "none"
+    },
+    {
+      "id": 133,
+      "name": "rug",
+      "supercategory": "none"
+    }
+  ],
+  "rel_categories": [
+    {
+      "id": 1,
+      "name": "over",
+      "supercategory": "none"
+    },
+    {
+      "id": 2,
+      "name": "in front of",
+      "supercategory": "none"
+    },
+    {
+      "id": 3,
+      "name": "beside",
+      "supercategory": "none"
+    },
+    {
+      "id": 4,
+      "name": "on",
+      "supercategory": "none"
+    },
+    {
+      "id": 5,
+      "name": "in",
+      "supercategory": "none"
+    },
+    {
+      "id": 6,
+      "name": "attached to",
+      "supercategory": "none"
+    },
+    {
+      "id": 7,
+      "name": "hanging from",
+      "supercategory": "none"
+    },
+    {
+      "id": 8,
+      "name": "on back of",
+      "supercategory": "none"
+    },
+    {
+      "id": 9,
+      "name": "falling off",
+      "supercategory": "none"
+    },
+    {
+      "id": 10,
+      "name": "going down",
+      "supercategory": "none"
+    },
+    {
+      "id": 11,
+      "name": "painted on",
+      "supercategory": "none"
+    },
+    {
+      "id": 12,
+      "name": "walking on",
+      "supercategory": "none"
+    },
+    {
+      "id": 13,
+      "name": "running on",
+      "supercategory": "none"
+    },
+    {
+      "id": 14,
+      "name": "crossing",
+      "supercategory": "none"
+    },
+    {
+      "id": 15,
+      "name": "standing on",
+      "supercategory": "none"
+    },
+    {
+      "id": 16,
+      "name": "lying on",
+      "supercategory": "none"
+    },
+    {
+      "id": 17,
+      "name": "sitting on",
+      "supercategory": "none"
+    },
+    {
+      "id": 18,
+      "name": "flying over",
+      "supercategory": "none"
+    },
+    {
+      "id": 19,
+      "name": "jumping over",
+      "supercategory": "none"
+    },
+    {
+      "id": 20,
+      "name": "jumping from",
+      "supercategory": "none"
+    },
+    {
+      "id": 21,
+      "name": "wearing",
+      "supercategory": "none"
+    },
+    {
+      "id": 22,
+      "name": "holding",
+      "supercategory": "none"
+    },
+    {
+      "id": 23,
+      "name": "carrying",
+      "supercategory": "none"
+    },
+    {
+      "id": 24,
+      "name": "looking at",
+      "supercategory": "none"
+    },
+    {
+      "id": 25,
+      "name": "guiding",
+      "supercategory": "none"
+    },
+    {
+      "id": 26,
+      "name": "kissing",
+      "supercategory": "none"
+    },
+    {
+      "id": 27,
+      "name": "eating",
+      "supercategory": "none"
+    },
+    {
+      "id": 28,
+      "name": "drinking",
+      "supercategory": "none"
+    },
+    {
+      "id": 29,
+      "name": "feeding",
+      "supercategory": "none"
+    },
+    {
+      "id": 30,
+      "name": "biting",
+      "supercategory": "none"
+    },
+    {
+      "id": 31,
+      "name": "catching",
+      "supercategory": "none"
+    },
+    {
+      "id": 32,
+      "name": "picking",
+      "supercategory": "none"
+    },
+    {
+      "id": 33,
+      "name": "playing with",
+      "supercategory": "none"
+    },
+    {
+      "id": 34,
+      "name": "chasing",
+      "supercategory": "none"
+    },
+    {
+      "id": 35,
+      "name": "climbing",
+      "supercategory": "none"
+    },
+    {
+      "id": 36,
+      "name": "cleaning",
+      "supercategory": "none"
+    },
+    {
+      "id": 37,
+      "name": "playing",
+      "supercategory": "none"
+    },
+    {
+      "id": 38,
+      "name": "touching",
+      "supercategory": "none"
+    },
+    {
+      "id": 39,
+      "name": "pushing",
+      "supercategory": "none"
+    },
+    {
+      "id": 40,
+      "name": "pulling",
+      "supercategory": "none"
+    },
+    {
+      "id": 41,
+      "name": "opening",
+      "supercategory": "none"
+    },
+    {
+      "id": 42,
+      "name": "cooking",
+      "supercategory": "none"
+    },
+    {
+      "id": 43,
+      "name": "talking to",
+      "supercategory": "none"
+    },
+    {
+      "id": 44,
+      "name": "throwing",
+      "supercategory": "none"
+    },
+    {
+      "id": 45,
+      "name": "slicing",
+      "supercategory": "none"
+    },
+    {
+      "id": 46,
+      "name": "driving",
+      "supercategory": "none"
+    },
+    {
+      "id": 47,
+      "name": "riding",
+      "supercategory": "none"
+    },
+    {
+      "id": 48,
+      "name": "parked on",
+      "supercategory": "none"
+    },
+    {
+      "id": 49,
+      "name": "driving on",
+      "supercategory": "none"
+    },
+    {
+      "id": 50,
+      "name": "about to hit",
+      "supercategory": "none"
+    },
+    {
+      "id": 51,
+      "name": "kicking",
+      "supercategory": "none"
+    },
+    {
+      "id": 52,
+      "name": "swinging",
+      "supercategory": "none"
+    },
+    {
+      "id": 53,
+      "name": "entering",
+      "supercategory": "none"
+    },
+    {
+      "id": 54,
+      "name": "exiting",
+      "supercategory": "none"
+    },
+    {
+      "id": 55,
+      "name": "enclosing",
+      "supercategory": "none"
+    },
+    {
+      "id": 56,
+      "name": "leaning on",
+      "supercategory": "none"
+    }
+  ]
+}

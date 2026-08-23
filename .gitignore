@@ -1,62 +1,76 @@
-# compilation and distribution
-__pycache__
+# Compilation and distribution
+__pycache__/
+*.py[cod]
+*$py.class
 _ext
-*.pyc
 *.so
 *.egg-info/
 build/
 dist/
 *.h5
 
-# ipython/jupyter notebooks
-#*.ipynb
-**/.ipynb_checkpoints/
+# Python virtual environment
+.venv/
+env/
+venv/
+ENV/
 
-# checkpoint
+# Checkpoints and model weights
+*.pt
+*.pth
+*.onnx
 checkpoints/
-logs/
+checkpoint/
+glove.6B.*
+runs/
+output/
 wandb/
+logs/
+scene_graph_tool/rlhp_runs/
 
-# dataset
+# Large datasets, parquet, and image archives
+*.parquet
+*.zip
+*.tar.gz
+scene_graph_tool/test_images/
+scene_graph_tool/train_*_images/
+scene_graph_tool/exports/
 !/datasets/
 /datasets/**
 !/datasets/vg/**
 !/datasets/VG150/**
 !/datasets/psg/obj_classes.txt
-*.jpeg
-*.npy
-
-# Editor temporaries
-*.swn
-*.swo
-*.swp
-*~
-
-# Pycharm editor settings
-.idea
-
-# vscode editor settings
-.vscode
-
-# MacOS
-.DS_Store
-
-# egg-info
-*.egg-info
-
-# others
-analysis/
-*SLURM.sh
-nohup.out
-*.cache
-*.onnx
-
-# add the datasets/VG150/zeroshot_triplet.pytorch file as exception
 !/datasets/VG150/zeroshot_triplet.pytorch
 
-runs/
-output/
+# Node.js and frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# models/
-*.pt
-*.pth
+# Editor and OS temporaries
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+*.swn
+*~
+*.cache
+nohup.out
+
+# LaTeX build artifacts (preserve main.pdf)
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.bbl
+report/*.blg
+report/*.synctex.gz
+scene_graph_tool/report/*.aux
+scene_graph_tool/report/*.log
+scene_graph_tool/report/*.out
+scene_graph_tool/report/*.toc
+scene_graph_tool/report/*.bbl
+scene_graph_tool/report/*.blg
+scene_graph_tool/report/*.synctex.gz

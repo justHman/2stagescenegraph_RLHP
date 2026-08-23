@@ -108,6 +108,13 @@ class ROIBoxHead(torch.nn.Module):
                         "image_size": target["image_size"],
                         "mode": target["mode"]
                     }
+                    for key in (
+                        "lb_boxes", "lb_input_size", "lb_gain", "lb_pad_w", "lb_pad_h",
+                        "feat_idx", "pred_labels", "pred_scores",
+                    ):
+                        if key in target:
+                            value = target[key]
+                            p[key] = value.clone() if hasattr(value, "clone") else value
                     if "attributes" in target:
                         p["attributes"] = target["attributes"].clone()
                     proposals.append(p)

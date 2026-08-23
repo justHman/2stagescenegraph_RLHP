@@ -3,7 +3,12 @@ from ultralytics.nn.tasks import DetectionModel
 
 from ultralytics.nn.tasks import load_checkpoint
 from ultralytics.utils import nms, ops
-from ultralytics.utils.plotting import feature_visualization
+# `feature_visualization` was removed from recent Ultralytics releases.
+# Keep compatibility with both the older API and the repository's local copy.
+try:
+    from ultralytics.utils.plotting import feature_visualization
+except ImportError:
+    from .utils import feature_visualization
 from pathlib import Path
 from omegaconf import DictConfig
 from ultralytics.nn.modules.head import Detect as _Detect

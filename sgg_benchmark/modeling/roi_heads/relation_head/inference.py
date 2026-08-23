@@ -132,11 +132,16 @@ class PostProcessor(nn.Module):
                 sorting_idx = sorting_idx[:self.rel_topk]
 
             rel_pair_idx = rel_pair_idx[sorting_idx]
+            rel_logits_sorted = rel_logit[sorting_idx]
             rel_class_prob = rel_class_prob[sorting_idx]
             rel_labels = rel_class[sorting_idx]
             t_scores_sorted = triple_scores[sorting_idx]
 
             box_dict['rel_pair_idxs'] = rel_pair_idx # (#rel, 2)
+            # Keep differentiable pre-softmax scores for RLHP.  Using these
+            # scores in Bradley-Terry avoids sending the pairwise gradient
+            # through the normalizer of every predicate class.
+            box_dict['pred_rel_logits'] = rel_logits_sorted # (#rel, #rel_class)
             box_dict['pred_rel_scores'] = rel_class_prob # (#rel, #rel_class)
             box_dict['pred_rel_labels'] = rel_labels # (#rel, )
             

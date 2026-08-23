@@ -18,7 +18,13 @@ The actual download logic lives in sgg_benchmark/data/datasets/download.py.
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
+
+# Support running this file directly from a source checkout.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from sgg_benchmark.data.datasets.download import download_dataset, DATASET_CONFIGS
 
@@ -48,10 +54,18 @@ if __name__ == "__main__":
              "This can be very large (tens of GB). "
              "By default only annotation JSONs are saved.",
     )
+    parser.add_argument(
+        "--splits",
+        nargs="+",
+        choices=("train", "val", "test"),
+        default=None,
+        help="Only download these splits (default: all available splits).",
+    )
     args = parser.parse_args()
 
     download_dataset(
         dataset_name=args.dataset,
         output_dir=args.output_dir,
         save_images=args.save_images,
+        splits=tuple(args.splits) if args.splits else None,
     )

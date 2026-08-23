@@ -10,7 +10,7 @@ from typing import List, Optional, Dict, Tuple, Union, Any
 from omegaconf import DictConfig
 
 from sgg_benchmark.structures.image_list import to_image_list
-from sgg_benchmark.structures.box_ops import cat_instances
+from sgg_benchmark.structures.box_ops import box_convert, cat_instances
 
 from ..backbone import build_backbone
 from ..roi_heads.roi_heads import build_roi_heads
@@ -114,7 +114,7 @@ class GeneralizedYOLO(nn.Module):
             proposals = self.add_gt_proposals(proposals, targets)
 
         # to avoid the empty list to be passed into roi_heads during testing and cause error in the pooler
-        if not self.training and proposals[0]["boxes"].shape[0] == 0:
+        if not self.training and not self.predcls and proposals[0]["boxes"].shape[0] == 0:
             # add empty missing fields
             for p in proposals:
                 p["pred_rel_scores"] = torch.tensor([], dtype=torch.float32, device=p["boxes"].device)
@@ -124,9 +124,30 @@ class GeneralizedYOLO(nn.Module):
 
         if self.roi_heads:
             if self.predcls:  # in predcls mode, we pass the targets as proposals
-                for t in targets:
+                for t, detector_proposal in zip(targets, proposals):
                     if "image_path" in t:
                         del t["image_path"]
+                    # GT boxes are in original-image coordinates while the YOLO
+                    # feature pyramid is built from the letterboxed input. Attach
+                    # the same lookup metadata as detector proposals so PredCLS
+                    # can gather object/union features at the correct FPN cells.
+                    gt_xyxy = box_convert(t["boxes"], t["mode"], "xyxy").to(detector_proposal["boxes"].device)
+                    lb_sz = float(detector_proposal.get("lb_input_size", images.tensors.shape[-1]))
+                    lb_gain = float(detector_proposal.get("lb_gain", 1.0))
+                    lb_pw = float(detector_proposal.get("lb_pad_w", 0.0))
+                    lb_ph = float(detector_proposal.get("lb_pad_h", 0.0))
+                    gt_lb = torch.stack([
+                        (gt_xyxy[:, 0] * lb_gain + lb_pw).clamp(0, lb_sz),
+                        (gt_xyxy[:, 1] * lb_gain + lb_ph).clamp(0, lb_sz),
+                        (gt_xyxy[:, 2] * lb_gain + lb_pw).clamp(0, lb_sz),
+                        (gt_xyxy[:, 3] * lb_gain + lb_ph).clamp(0, lb_sz),
+                    ], dim=1)
+                    t["lb_boxes"] = gt_lb
+                    t["lb_input_size"] = int(lb_sz)
+                    t["lb_gain"] = lb_gain
+                    t["lb_pad_w"] = lb_pw
+                    t["lb_pad_h"] = lb_ph
+                    t["feat_idx"] = self._gt_feat_idx(gt_lb, int(lb_sz))
                     t["pred_labels"] = t["labels"]
                     t["pred_scores"] = torch.ones_like(t["labels"], dtype=torch.float32)
                 x, result, detector_losses = self.roi_heads(features, proposals, targets, logger, targets, return_attention=return_attention)
@@ -209,7 +230,6 @@ class GeneralizedYOLO(nn.Module):
         for proposal, t in zip(proposals, targets):
             # Convert GT boxes from original-image space to letterbox space so
             # lb_boxes is valid for GT proposals (used by feature-map lookups).
-            from sgg_benchmark.structures.box_ops import box_convert
             gt_xyxy = box_convert(t["boxes"], t["mode"], "xyxy").to(proposal["boxes"].device)
             lb_sz   = float(proposal.get("lb_input_size", 640))
             lb_gain = float(proposal.get("lb_gain", 1.0))

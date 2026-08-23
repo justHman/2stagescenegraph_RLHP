@@ -136,6 +136,7 @@ def download_dataset(
     dataset_name: str,
     output_dir: Path | None = None,
     save_images: bool = False,
+    splits: tuple[str, ...] | None = None,
 ) -> None:
     """Download *dataset_name* from HuggingFace Hub into *output_dir*.
 
@@ -150,6 +151,9 @@ def download_dataset(
     save_images : bool
         When ``True``, images are also downloaded and saved alongside the
         annotation JSON files.  This can require tens of GB of disk space.
+    splits:
+        Optional split names to download. Defaults to every split made
+        available by the selected dataset.
     """
     from datasets import load_dataset  # heavy import — deferred on purpose
 
@@ -161,7 +165,11 @@ def download_dataset(
 
     cfg = DATASET_CONFIGS[dataset_name]
     hub_repo:  str  = cfg["hub_repo"]
-    splits:   tuple = cfg["splits"]
+    available_splits: tuple = cfg["splits"]
+    requested_splits = tuple(splits) if splits else available_splits
+    unknown_splits = set(requested_splits) - set(available_splits)
+    if unknown_splits:
+        raise ValueError(f"Unknown splits for {dataset_name}: {sorted(unknown_splits)}")
     local_dir: Path = Path(output_dir) if output_dir is not None else cfg["default_dir"]
 
     print(f"\n{'='*70}")
@@ -177,7 +185,7 @@ def download_dataset(
     print(f"  categories     : {len(categories)}")
     print(f"  rel_categories : {len(rel_categories)}\n")
 
-    for split in splits:
+    for split in requested_splits:
         if split not in dataset_dict:
             print(f"  [SKIP] split '{split}' not found in the Hub dataset.")
             continue
@@ -204,4 +212,6 @@ def download_dataset(
 
     if not save_images:
         print("\n⚠  Images were NOT downloaded.  You need to supply them separately.")
-        print(cfg["image_note"])
+        image_note = cfg.get("image_note")
+        if image_note:
+            print(image_note)

@@ -4,7 +4,11 @@ from ultralytics.nn.modules import YOLOESegment
 
 from ultralytics.nn.tasks import load_checkpoint
 from ultralytics.utils import ops
-from ultralytics.utils.plotting import feature_visualization
+# `feature_visualization` was removed from recent Ultralytics releases.
+try:
+    from ultralytics.utils.plotting import feature_visualization
+except ImportError:
+    from .utils import feature_visualization
 from pathlib import Path
 
 

@@ -21,6 +21,8 @@ Examples
   python tools/evaluate.py --model-dir checkpoints/PSG/react++_yolo12m --compare --latency
 """
 
+from __future__ import annotations
+
 import argparse
 import ctypes
 import json
@@ -70,7 +72,10 @@ try:
 except Exception:
     pass
 
-import onnxruntime as ort  # noqa: E402  (after LD fix)
+try:
+    import onnxruntime as ort  # noqa: E402  (after LD fix)
+except ImportError:  # PyTorch-only evaluation does not require ONNX Runtime.
+    ort = None
 
 # ── Project root ────────────────────────────────────────────────────────────
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -192,7 +197,7 @@ def resolve_checkpoint_from_dir(model_dir: str) -> str:
     return ckpt_path
 
 
-def load_and_patch_config(run_dir: Path, local_data_dir=None):
+def load_and_patch_config(run_dir: Path, local_data_dir=None, sgg_mode: str = "sgdet"):
     for candidate in ("config.yml", "config.yaml", "hydra_config.yaml"):
         cfg_file = run_dir / candidate
         if cfg_file.exists():
@@ -212,15 +217,25 @@ def load_and_patch_config(run_dir: Path, local_data_dir=None):
                 yaml_cfg.datasets.data_dir = local_data_dir
             except Exception:
                 pass
-        # Patch glove_dir if stored path doesn't exist locally
+        # The trained embedding weights are restored from the checkpoint. Model
+        # construction only needs a valid local vector-cache tuple, so avoid a
+        # large GloVe download when the config contains a path from another host.
         glove = OmegaConf.select(yaml_cfg, "glove_dir")
         if glove and not os.path.isdir(str(glove)):
-            yaml_cfg.glove_dir = str(_PROJECT_ROOT)
+            vector_dir = run_dir / "word_vectors"
+            vector_dir.mkdir(parents=True, exist_ok=True)
+            vector_type = str(OmegaConf.select(yaml_cfg, "model.text_embedding") or "glove.6B")
+            dimension = int(OmegaConf.select(yaml_cfg, "model.roi_relation_head.embed_dim") or 200)
+            vector_path = vector_dir / f"{vector_type}.{dimension}d.pt"
+            if not vector_path.exists():
+                torch.save(({}, torch.empty((0, dimension), dtype=torch.float32), dimension), vector_path)
+            yaml_cfg.glove_dir = str(vector_dir)
         yaml_cfg.output_dir = str(run_dir)
-        # Always evaluate in sgdet mode
+        # Select the standard SGG protocol explicitly. PredCLS uses both GT boxes
+        # and GT object labels; SGCls uses only GT boxes; SGDet uses neither.
         try:
-            yaml_cfg.model.roi_relation_head.use_gt_box          = False
-            yaml_cfg.model.roi_relation_head.use_gt_object_label = False
+            yaml_cfg.model.roi_relation_head.use_gt_box = sgg_mode in {"sgcls", "predcls"}
+            yaml_cfg.model.roi_relation_head.use_gt_object_label = sgg_mode == "predcls"
         except Exception:
             pass
     return get_cfg(yaml_cfg)
@@ -263,6 +278,11 @@ def load_pytorch_model(cfg, checkpoint: str, device: str):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def load_onnx_session(onnx_path: str, provider: str, logger) -> ort.InferenceSession:
+    if ort is None:
+        raise RuntimeError(
+            "ONNX evaluation requires onnxruntime or onnxruntime-gpu; "
+            "install it or omit --onnx/--compare."
+        )
     sess_opts = ort.SessionOptions()
     sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
     session = ort.InferenceSession(
@@ -282,6 +302,16 @@ def load_onnx_session(onnx_path: str, provider: str, logger) -> ort.InferenceSes
 # Full evaluation (all test images)
 # ══════════════════════════════════════════════════════════════════════════════
 
+def _target_to_device(target, device):
+    """Move tensor fields in a dataset target to the inference device."""
+    if isinstance(target, dict):
+        return {key: _target_to_device(value, device) for key, value in target.items()}
+    if isinstance(target, (list, tuple)):
+        converted = [_target_to_device(value, device) for value in target]
+        return type(target)(converted)
+    return target.to(device) if hasattr(target, "to") else target
+
+
 def eval_pytorch(model, dataset, device: str, logger) -> tuple:
     """Run full PyTorch inference on all dataset images. Returns (predictions, timing)."""
     dev = torch.device(device)
@@ -295,7 +325,7 @@ def eval_pytorch(model, dataset, device: str, logger) -> tuple:
 
     # Warmup on first image
     logger.info(f"Warming up PyTorch on {dev}…")
-    img0, _, _ = dataset[0]
+    img0, target0, _ = dataset[0]
     if isinstance(img0, (list, tuple)):
         img0 = img0[0]
     img_info0 = dataset.get_img_info(0)
@@ -303,7 +333,8 @@ def eval_pytorch(model, dataset, device: str, logger) -> tuple:
     with torch.no_grad():
         wlist = ImageList(img0.unsqueeze(0).to(dev), [(h0, w0)])
         for _ in range(5):
-            _ = model(wlist)
+            targets = [_target_to_device(target0, dev)] if model.cfg.model.roi_relation_head.use_gt_box else None
+            _ = model(wlist, targets=targets)
     if dev.type == "cuda":
         torch.cuda.synchronize()
 
@@ -314,12 +345,13 @@ def eval_pytorch(model, dataset, device: str, logger) -> tuple:
         for i in tqdm(range(len(dataset)), desc="PyTorch Eval", dynamic_ncols=True):
             img_info = dataset.get_img_info(i)
             w, h = img_info["width"], img_info["height"]
-            img, _, _ = dataset[i]
+            img, target, _ = dataset[i]
             if isinstance(img, (list, tuple)):
                 img = img[0]
             img_list = ImageList(img.unsqueeze(0).to(dev), [(h, w)])
             t0 = time.perf_counter()
-            output = model(img_list)
+            targets = [_target_to_device(target, dev)] if model.cfg.model.roi_relation_head.use_gt_box else None
+            output = model(img_list, targets=targets)
             if dev.type == "cuda":
                 torch.cuda.synchronize()
             fwd_times.append((time.perf_counter() - t0) * 1000.0)
@@ -570,6 +602,10 @@ def main():
     parser.add_argument("--device",     default="cuda",
                         help="PyTorch device (default: cuda)")
     parser.add_argument(
+        "--sgg-mode", default="sgdet", choices=["sgdet", "sgcls", "predcls"],
+        help="Scene-graph evaluation protocol (default: sgdet)",
+    )
+    parser.add_argument(
         "--provider", default="CUDAExecutionProvider",
         choices=["CUDAExecutionProvider", "CPUExecutionProvider",
                  "TensorrtExecutionProvider"],
@@ -589,6 +625,9 @@ def main():
     args = parser.parse_args()
 
     run_dir = Path(args.model_dir).resolve()
+
+    if (args.onnx is not None or args.compare) and args.sgg_mode != "sgdet":
+        parser.error("ONNX evaluation only supports --sgg-mode sgdet because the exported graph has no GT-target input.")
 
     if args.compare:
         _run_compare(args, run_dir)
@@ -610,7 +649,7 @@ def _resolve_onnx_path(args, run_dir: Path) -> str:
 def _run_compare(args, run_dir: Path):
     """Evaluate both PyTorch and ONNX sequentially, writing separate output dirs."""
     # Build shared infrastructure (config, dataset) once
-    cfg = load_and_patch_config(run_dir, args.data_dir)
+    cfg = load_and_patch_config(run_dir, args.data_dir, args.sgg_mode)
     data_loaders = make_data_loader(cfg, mode="test", is_distributed=False)
     loader  = data_loaders[0] if isinstance(data_loaders, (list, tuple)) else data_loaders
     dataset = loader.dataset
@@ -731,10 +770,11 @@ def _run_single(args, run_dir: Path, use_onnx: bool):
     logger.info(f"Model dir  : {run_dir}")
     logger.info(f"Output dir : {output_dir}")
     logger.info(f"Backend    : {'ONNX  (' + args.provider + ')' if use_onnx else 'PyTorch (' + args.device + ')'}")
+    logger.info(f"SGG mode   : {args.sgg_mode}")
     logger.info(f"skip-eval  : {args.skip_eval}  latency: {args.latency}  num-images: {args.num_images}")
 
     # ── Config ──────────────────────────────────────────────────────────────
-    cfg = load_and_patch_config(run_dir, args.data_dir)
+    cfg = load_and_patch_config(run_dir, args.data_dir, args.sgg_mode)
 
     # ── Dataset ─────────────────────────────────────────────────────────────
     logger.info("Building test data loader…")
@@ -810,6 +850,7 @@ def _run_single(args, run_dir: Path, use_onnx: bool):
     summary: dict = {
         "model_dir":   str(run_dir),
         "mode":        "onnx" if use_onnx else "pytorch",
+        "sgg_mode":    args.sgg_mode,
         "eval_timing": eval_timing,
     }
     if latency_result:
