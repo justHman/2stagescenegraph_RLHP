@@ -20,6 +20,7 @@ This toolkit enables:
 
 - [System Architecture](#system-architecture)
 - [Directory Structure](#directory-structure)
+- [Pretrained Checkpoints & Runs (Google Drive)](#pretrained-checkpoints--runs-google-drive)
 - [Installation](#installation)
 - [Quick Start: Annotation GUI](#quick-start-annotation-gui)
 - [RLHP Training & Ablation Pipeline](#rlhp-training--ablation-pipeline)
@@ -27,6 +28,21 @@ This toolkit enables:
 - [Analysis & Visualization Suite](#analysis--visualization-suite)
 - [Academic Report](#academic-report)
 - [Citation & Contributor Attribution](#citation--contributor-attribution)
+
+---
+
+## Pretrained Checkpoints & Runs (Google Drive)
+
+All trained model checkpoints, epoch diagnostics, and ablation logs (~5.4 GB) are hosted on Google Drive:
+
+🔗 **[Google Drive Checkpoints & RLHP Runs Folder](https://drive.google.com/drive/folders/1CRyhpJNsR1Ht4Kay5SEpRqtrl-uTk-Bw?usp=sharing)**
+
+To download them automatically into `scene_graph_tool/rlhp_runs/`:
+```bash
+chmod +x scene_graph_tool/checkpoints/download_runs.sh
+./scene_graph_tool/checkpoints/download_runs.sh
+```
+Detailed model breakdowns and evaluation guides are available under [`checkpoints/README.md`](checkpoints/README.md).
 
 ---
 
@@ -122,6 +138,11 @@ scene_graph_tool/
 ├── doc/
 │   ├── REACTPP_SHAPE_FLOW.md          # Tensor shape flow and projection architecture
 │   └── plan_rlhp.md                   # RLHP mathematical formulation & gating spec
+│
+├── checkpoints/                       # Pretrained checkpoints & Google Drive links
+│   ├── README.md                      # Download links & model breakdown
+│   ├── download_runs.sh               # Automated Google Drive downloader
+│   └── package_runs.sh                # Archive packager
 │
 └── report/                            # Academic Research Report
     ├── main.tex                       # LaTeX source (9-page publication layout)

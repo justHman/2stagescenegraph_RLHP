@@ -19,14 +19,17 @@ ENV/
 *.pt
 *.pth
 *.onnx
-checkpoints/
-checkpoint/
+/checkpoints/
+/checkpoint/
 glove.6B.*
 runs/
 output/
 wandb/
 logs/
 scene_graph_tool/rlhp_runs/
+scene_graph_tool/checkpoints/packaged_archives/
+!scene_graph_tool/checkpoints/
+!scene_graph_tool/checkpoints/**
 
 # Large datasets, parquet, and image archives
 *.parquet
