@@ -11,12 +11,13 @@
 
 This repository now includes **Human Preference Alignment for Two-Stage Scene Graph Generation (YOLO12m-REACT++ on PSG)**:
 - 🖥️ **Interactive Labeler GUI (`scene_graph_tool/server.py`)**: React + FastAPI active uncertainty-guided annotation workspace.
-- 🎯 **Tripartite RLHP Objective**: Fine-tunes predicate classification using Bradley-Terry preference loss + masked KL retention + prototype anchoring.
+- 🎯 **Tripartite RLHP Objective**: Fine-tunes predicate classification using Bradley-Terry preference loss + masked KL retention + prototype anchoring:
+  $$\mathcal{L}_{\mathrm{total}} = \mathcal{L}_{\mathrm{pref}} + \lambda_{\mathrm{KL}}\mathcal{L}_{\mathrm{KL}} + \lambda_{\mathrm{proto}}\mathcal{L}_{\mathrm{proto}} \quad (\lambda_{\mathrm{KL}}=20, \lambda_{\mathrm{proto}}=20, \tau=0.1)$$
 - 📊 **PSG Benchmark Evaluation**: Improves test mR@50 (+0.57%), mR@100 (+0.41%), and F1@50 (+0.36%) while strictly preserving Stage 1 bbox mAP (56.57%).
 - 💾 **Pretrained Checkpoints (Google Drive)**: [Download RLHP Runs & Weights](https://drive.google.com/drive/folders/1CRyhpJNsR1Ht4Kay5SEpRqtrl-uTk-Bw?usp=sharing)
 - 📄 **Publication Report**: Full 9-page research paper with LaTeX sources and PDF in [`scene_graph_tool/report/`](scene_graph_tool/report/).
 
-👉 **See [`scene_graph_tool/README.md`](scene_graph_tool/README.md) for full documentation, GUI quickstart, and training instructions.**
+👉 **See [`scene_graph_tool/README.md`](scene_graph_tool/README.md) for full documentation, mathematical formulation, GUI quickstart, and training instructions.**
 👉 **See [`scene_graph_tool/checkpoints/README.md`](scene_graph_tool/checkpoints/README.md) for checkpoint download details.**
 
 ---
