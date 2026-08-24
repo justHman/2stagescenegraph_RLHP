@@ -12,10 +12,10 @@ The Google Drive directory contains the complete multi-epoch checkpoints and eva
 
 | Model Directory | Description | SGDet mR@50 | SGDet mR@100 | SGDet F1@50 | Bbox mAP |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **`preference3_tuned_anchor_ret20_tau01/`** | **Full RLHP (Tuned - Main Model)**<br/>$\mathcal{L}_{\mathrm{pref}} + 20\mathcal{L}_{\mathrm{KL}} + 20\mathcal{L}_{\mathrm{proto}} \ (\tau=0.1)$ | **26.95%** | **28.69%** | **31.58%** | **56.57%** |
-| `preference3_pure_pref_setting_tau01/` | **Ablation 1**: Pure Bradley-Terry ($\mathcal{L}_{\mathrm{pref}}, \tau=0.1$) | 21.21% | 22.57% | 26.64% | 56.57% |
-| `preference3_proto_anchor_only_tau01/` | **Ablation 2**: Preference + Proto Anchor ($\mathcal{L}_{\mathrm{pref}} + 20\mathcal{L}_{\mathrm{proto}}$) | 24.51% | 26.18% | 29.58% | 56.57% |
-| `preference3_retention_only_tau01/` | **Ablation 3**: Preference + KL Retention ($\mathcal{L}_{\mathrm{pref}} + 20\mathcal{L}_{\mathrm{KL}}$) | 26.21% | 27.88% | 30.87% | 56.57% |
+| **`preference3_tuned_anchor_ret20_tau01/`** | **Full RLHP (Tuned - Main Model)**<br/>$\mathcal{L}_{\text{pref}} + 20\mathcal{L}_{\text{KL}} + 20\mathcal{L}_{\text{proto}} \ (\tau=0.1)$ | **26.95%** | **28.69%** | **31.58%** | **56.57%** |
+| `preference3_pure_pref_setting_tau01/` | **Ablation 1**: Pure Bradley-Terry ($\mathcal{L}_{\text{pref}}, \tau=0.1$) | 21.21% | 22.57% | 26.64% | 56.57% |
+| `preference3_proto_anchor_only_tau01/` | **Ablation 2**: Preference + Proto Anchor ($\mathcal{L}_{\text{pref}} + 20\mathcal{L}_{\text{proto}}$) | 24.51% | 26.18% | 29.58% | 56.57% |
+| `preference3_retention_only_tau01/` | **Ablation 3**: Preference + KL Retention ($\mathcal{L}_{\text{pref}} + 20\mathcal{L}_{\text{KL}}$) | 26.21% | 27.88% | 30.87% | 56.57% |
 | `preference3_audit_v6_loader/` | Audited preference splits & validation provenance | — | — | — | — |
 | `pure_pref_run1/` | Preliminary pure preference diagnostic baseline | — | — | — | — |
 
