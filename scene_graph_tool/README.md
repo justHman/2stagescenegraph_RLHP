@@ -7,16 +7,10 @@
 An end-to-end human preference alignment and active uncertainty-guided annotation framework for **Two-Stage Scene Graph Generation (SGG)** on the **Panoptic Scene Graph (PSG)** benchmark.
 
 This toolkit enables:
-1. **Active Uncertainty-Guided Annotation GUI**: Interactive React + Vite frontend backed by a high-performance FastAPI server running two-stage YOLO12m-REACT++ inference to query human preferences on the most ambiguous predicate candidates.
-2. **Reinforcement Learning from Human Preferences (RLHP)**: Fine-tunes relation projection layers using a tripartite objective:
-
-$$
-\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{pref}} + \lambda_{\text{KL}}\mathcal{L}_{\text{KL}} + \lambda_{\text{proto}}\mathcal{L}_{\text{proto}}
-$$
-
-   combining Bradley-Terry preference loss, masked KL retention, and prototype anchoring to eliminate catastrophic semantic drift.
-3. **Comprehensive Analysis & Benchmark Evaluation**: Complete suite of tools to evaluate SGDet / PredCLS on PSG test, generate publication-grade training dynamics, per-predicate recall shifts, and qualitative scene graph grids.
-4. **Academic Publication Report**: A full 9-page research report with complete LaTeX sources and precompiled PDF under [`report/`](report/).
+- 🖥️ **Active Uncertainty-Guided Annotation GUI**: Interactive React + Vite frontend backed by a high-performance FastAPI server running two-stage YOLO12m-REACT++ inference to query human preferences on the most ambiguous predicate candidates.
+- 🎯 **Reinforcement Learning from Human Preferences (RLHP)**: Fine-tunes relation projection layers using a tripartite objective (Bradley-Terry preference loss + masked KL retention + prototype anchoring) to eliminate catastrophic semantic drift.
+- 📊 **Comprehensive Analysis & Benchmark Evaluation**: Complete suite of tools to evaluate SGDet / PredCLS on PSG test, generate publication-grade training dynamics, per-predicate recall shifts, and qualitative scene graph grids.
+- 📄 **Academic Publication Report**: A full 9-page research report with complete LaTeX sources and precompiled PDF under [`report/`](report/).
 
 ---
 
