@@ -11,7 +11,12 @@
 
 This repository now includes **Human Preference Alignment for Two-Stage Scene Graph Generation (YOLO12m-REACT++ on PSG)**:
 - 🖥️ **Interactive Labeler GUI (`scene_graph_tool/server.py`)**: React + FastAPI active uncertainty-guided annotation workspace.
-- 🎯 **Tripartite RLHP Objective**: Fine-tunes predicate classification using Bradley-Terry preference loss + masked KL retention + prototype anchoring: $\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{pref}} + \lambda_{\text{KL}}\mathcal{L}_{\text{KL}} + \lambda_{\text{proto}}\mathcal{L}_{\text{proto}}$ ($\lambda_{\text{KL}}=20, \lambda_{\text{proto}}=20, \tau=0.1$).
+- 🎯 **Tripartite RLHP Objective**: Fine-tunes predicate classification using Bradley-Terry preference loss + masked KL retention + prototype anchoring ($\lambda_{\text{KL}}=20, \lambda_{\text{proto}}=20, \tau=0.1$):
+
+$$
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{pref}} + \lambda_{\text{KL}}\mathcal{L}_{\text{KL}} + \lambda_{\text{proto}}\mathcal{L}_{\text{proto}}
+$$
+
 - 📊 **PSG Benchmark Evaluation**: Improves test mR@50 (+0.57%), mR@100 (+0.41%), and F1@50 (+0.36%) while strictly preserving Stage 1 bbox mAP (56.57%).
 - 💾 **Pretrained Checkpoints (Google Drive)**: [Download RLHP Runs & Weights](https://drive.google.com/drive/folders/1CRyhpJNsR1Ht4Kay5SEpRqtrl-uTk-Bw?usp=sharing)
 - 📄 **Publication Report**: Full 9-page research paper with LaTeX sources and PDF in [`scene_graph_tool/report/`](scene_graph_tool/report/).

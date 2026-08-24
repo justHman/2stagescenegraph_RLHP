@@ -8,7 +8,13 @@ An end-to-end human preference alignment and active uncertainty-guided annotatio
 
 This toolkit enables:
 1. **Active Uncertainty-Guided Annotation GUI**: Interactive React + Vite frontend backed by a high-performance FastAPI server running two-stage YOLO12m-REACT++ inference to query human preferences on the most ambiguous predicate candidates.
-2. **Reinforcement Learning from Human Preferences (RLHP)**: Fine-tunes relation projection layers using a tripartite objective: $\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{pref}} + \lambda_{\text{KL}}\mathcal{L}_{\text{KL}} + \lambda_{\text{proto}}\mathcal{L}_{\text{proto}}$, combining Bradley-Terry preference loss, masked KL retention, and prototype anchoring to eliminate catastrophic semantic drift.
+2. **Reinforcement Learning from Human Preferences (RLHP)**: Fine-tunes relation projection layers using a tripartite objective:
+
+$$
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{pref}} + \lambda_{\text{KL}}\mathcal{L}_{\text{KL}} + \lambda_{\text{proto}}\mathcal{L}_{\text{proto}}
+$$
+
+   combining Bradley-Terry preference loss, masked KL retention, and prototype anchoring to eliminate catastrophic semantic drift.
 3. **Comprehensive Analysis & Benchmark Evaluation**: Complete suite of tools to evaluate SGDet / PredCLS on PSG test, generate publication-grade training dynamics, per-predicate recall shifts, and qualitative scene graph grids.
 4. **Academic Publication Report**: A full 9-page research report with complete LaTeX sources and precompiled PDF under [`report/`](report/).
 
@@ -164,7 +170,7 @@ $$
 The selector first keeps a confident candidate shortlist ($\text{Top-}K$ by $p_1$), then ranks and presents candidate queries with the smallest relative margin $\Delta_{\text{rel}}$ (highest uncertainty $U$).
 
 ### 2. Bradley-Terry Preference Objective
-For an annotated sample $m = (I_m, s_m, o_m, p_{m,a}, p_{m,b}) \in \mathcal{D}_{\text{pref}}$, let $r_{m,a}, r_{m,b} \in \mathbb{R}$ denote the pre-softmax relation logits for candidate predicates $p_{m,a}$ and $p_{m,b}$ on the directed object pair $(s_m, o_m)$. Under the Bradley-Terry preference model with temperature scaling $\tau = 0.1$, the predicted choice probability $\pi_{m,k}$ for candidate $k \in \{a, b\}$ is:
+For an annotated sample $m = (I_m, s, o, p_a, p_b) \in \mathcal{D}$, let $r_a, r_b \in \mathbb{R}$ denote the pre-softmax relation logits for candidate predicates $p_a$ and $p_b$ on the directed object pair $(s, o)$. Under the Bradley-Terry preference model with temperature scaling $\tau = 0.1$, the predicted choice probability $\pi_{m,k}$ for candidate $k \in \{a, b\}$ is:
 
 $$
 \pi_{m,k} = \frac{\exp(\tau r_{m,k})}{\exp(\tau r_{m,a}) + \exp(\tau r_{m,b})}
@@ -189,7 +195,7 @@ $$
 $$
 
 ### 3. Masked KL Retention Regularization
-To protect baseline visual relation knowledge across the $55$ unlabelled predicate classes $\mathcal{O}_m = \{1, \dots, C_{\text{rel}}\} \setminus \{p_{m,a}, p_{m,b}\}$ ($C_{\text{rel}} = 57$ total PSG classes), the full softmax distribution is decomposed into unlabelled total mass $M_m, M_m^0$ and conditional distributions $\bar{q}_{m,c}, \bar{q}_{m,c}^0$:
+To protect baseline visual relation knowledge across the $55$ unlabelled predicate classes $\mathcal{O} = \{1, \dots, C\} \setminus \{p_a, p_b\}$ ($C = 57$ total PSG classes), the full softmax distribution is decomposed into unlabelled total mass $M_m, M_m^0$ and conditional distributions $\bar{q}_{m,c}, \bar{q}_{m,c}^0$:
 
 $$
 M_m^0 = \sum_{c\in\mathcal{O}_m} q_{m,c}^0, \quad M_m = \sum_{c\in\mathcal{O}_m} q_{m,c}, \quad \bar{q}_{m,c}^0 = \frac{q_{m,c}^0}{M_m^0}, \quad \bar{q}_{m,c} = \frac{q_{m,c}}{M_m}
@@ -216,10 +222,10 @@ $$
 $$
 
 ### 4. Prototype Manifold Cosine Anchor
-To prevent global coordinate frame distortion and prototype crowding across all $C_{\text{rel}} = 57$ categories, normalized predicate prototype embeddings $\hat{\mathbf{p}}_c$ are anchored to frozen baseline prototypes $\hat{\mathbf{p}}_c^0$:
+To prevent global coordinate frame distortion and prototype crowding across all $57$ predicate categories ($C = 57$), normalized predicate prototype embeddings $\hat{\mathbf{p}}_c$ are anchored to frozen baseline prototypes $\hat{\mathbf{p}}_c^0$:
 
 $$
-\mathcal{L}_{\text{proto}} = \frac{1}{C_{\text{rel}}} \sum_{c=1}^{C_{\text{rel}}} \left( 1 - \langle \hat{\mathbf{p}}_c, \hat{\mathbf{p}}_c^0 \rangle \right), \qquad \hat{\mathbf{p}}_c = \frac{\phi_{\text{proj}}(\mathbf{P}_c)}{\|\phi_{\text{proj}}(\mathbf{P}_c)\|_2}
+\mathcal{L}_{\text{proto}} = \frac{1}{C} \sum_{c=1}^{C} \left( 1 - \langle \hat{\mathbf{p}}_c, \hat{\mathbf{p}}_c^0 \rangle \right), \qquad \hat{\mathbf{p}}_c = \frac{\phi_{\text{proj}}(\mathbf{P}_c)}{\|\phi_{\text{proj}}(\mathbf{P}_c)\|_2}
 $$
 
 ### 5. Tripartite Total Optimization Objective
