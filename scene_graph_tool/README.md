@@ -36,11 +36,6 @@ All trained model checkpoints, epoch diagnostics, and ablation logs (~5.4 GB) ar
 
 🔗 **[Google Drive Checkpoints & RLHP Runs Folder](https://drive.google.com/drive/folders/1CRyhpJNsR1Ht4Kay5SEpRqtrl-uTk-Bw?usp=sharing)**
 
-To download them automatically into `scene_graph_tool/rlhp_runs/`:
-```bash
-chmod +x scene_graph_tool/checkpoints/download_runs.sh
-./scene_graph_tool/checkpoints/download_runs.sh
-```
 Detailed model breakdowns and evaluation guides are available under [`checkpoints/README.md`](checkpoints/README.md).
 
 ---
