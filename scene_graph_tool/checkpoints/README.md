@@ -17,7 +17,7 @@ The Google Drive directory contains the complete multi-epoch checkpoints and eva
 | `preference3_proto_anchor_only_tau01/` | **Ablation 2**: Preference + Proto Anchor (`L_pref + 20*L_proto`) | 24.51% | 26.18% | 29.58% | 56.57% |
 | `preference3_retention_only_tau01/` | **Ablation 3**: Preference + KL Retention (`L_pref + 20*L_KL`) | 26.21% | 27.88% | 30.87% | 56.57% |
 | `preference3_audit_v6_loader/` | Audited preference splits & validation provenance | — | — | — | — |
-| `pure_pref_run1/` | Preliminary pure preference diagnostic baseline | — | — | — | — |
+
 
 ---
 
