@@ -43,17 +43,6 @@ scene_graph_tool/
 
 ---
 
-## Automated Download
-
-You can download all folders directly into `scene_graph_tool/rlhp_runs/` using the provided script:
-
-```bash
-chmod +x scene_graph_tool/checkpoints/download_runs.sh
-./scene_graph_tool/checkpoints/download_runs.sh
-```
-
----
-
 ## Evaluation & Inference with Pretrained Checkpoints
 
 ### 1. Launching GUI with Aligned Model
