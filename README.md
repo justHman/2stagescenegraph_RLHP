@@ -1,4 +1,4 @@
-# Scene Graph Benchmark in PyTorch & Human Preference Alignment (RLHP)
+# Human Preference Alignment for Two-Stage Scene Graph Generation (YOLO12m-REACT++ on PSG)
 
 [![LICENSE](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
