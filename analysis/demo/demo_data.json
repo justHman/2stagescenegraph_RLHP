@@ -1,0 +1,2327 @@
+{
+ "meta": {
+  "paper": "Human Preference Alignment for Two-Stage Scene Graph Generation (YOLO12m-REACT++ on PSG)",
+  "benchmark": "PSG test (2,177 images)",
+  "protocol": "SGDet",
+  "lambda_kl": 20,
+  "lambda_proto": 20,
+  "tau": 0.1
+ },
+ "benchmark": [
+  {
+   "name": "Pure Preference",
+   "mR": {
+    "baseline": {
+     "20": 23.12,
+     "50": 26.3,
+     "100": 28.26
+    },
+    "rlhp": {
+     "20": 18.92,
+     "50": 21.21,
+     "100": 22.57
+    }
+   },
+   "R": {
+    "baseline": {
+     "20": 32.5,
+     "50": 38.08,
+     "100": 41.27
+    },
+    "rlhp": {
+     "20": 30.59,
+     "50": 35.82,
+     "100": 38.72
+    }
+   },
+   "F1": {
+    "baseline": {
+     "20": 27.02,
+     "50": 31.11,
+     "100": 33.55
+    },
+    "rlhp": {
+     "20": 23.38,
+     "50": 26.64,
+     "100": 28.52
+    }
+   },
+   "bbox_mAP": 56.57,
+   "delta_mR50": -5.09,
+   "delta_mR100": -5.69,
+   "delta_F150": -4.47
+  },
+  {
+   "name": "+ Proto Anchor",
+   "mR": {
+    "baseline": {
+     "20": 22.19,
+     "50": 25.36,
+     "100": 27.31
+    },
+    "rlhp": {
+     "20": 21.24,
+     "50": 24.51,
+     "100": 26.18
+    }
+   },
+   "R": {
+    "baseline": {
+     "20": 32.56,
+     "50": 38.17,
+     "100": 41.37
+    },
+    "rlhp": {
+     "20": 31.77,
+     "50": 37.31,
+     "100": 40.35
+    }
+   },
+   "F1": {
+    "baseline": {
+     "20": 26.39,
+     "50": 30.48,
+     "100": 32.9
+    },
+    "rlhp": {
+     "20": 25.46,
+     "50": 29.58,
+     "100": 31.76
+    }
+   },
+   "bbox_mAP": 56.57,
+   "delta_mR50": -0.85,
+   "delta_mR100": -1.13,
+   "delta_F150": -0.9
+  },
+  {
+   "name": "+ KL Retention",
+   "mR": {
+    "baseline": {
+     "20": 23.99,
+     "50": 27.04,
+     "100": 28.96
+    },
+    "rlhp": {
+     "20": 22.93,
+     "50": 26.21,
+     "100": 27.88
+    }
+   },
+   "R": {
+    "baseline": {
+     "20": 32.46,
+     "50": 38.03,
+     "100": 41.22
+    },
+    "rlhp": {
+     "20": 31.86,
+     "50": 37.56,
+     "100": 40.7
+    }
+   },
+   "F1": {
+    "baseline": {
+     "20": 27.59,
+     "50": 31.61,
+     "100": 34.02
+    },
+    "rlhp": {
+     "20": 26.67,
+     "50": 30.87,
+     "100": 33.09
+    }
+   },
+   "bbox_mAP": 56.57,
+   "delta_mR50": -0.83,
+   "delta_mR100": -1.08,
+   "delta_F150": -0.74
+  },
+  {
+   "name": "Full RLHP (Tuned)",
+   "mR": {
+    "baseline": {
+     "20": 23.28,
+     "50": 26.37,
+     "100": 28.28
+    },
+    "rlhp": {
+     "20": 23.57,
+     "50": 26.95,
+     "100": 28.69
+    }
+   },
+   "R": {
+    "baseline": {
+     "20": 32.63,
+     "50": 38.25,
+     "100": 41.45
+    },
+    "rlhp": {
+     "20": 32.43,
+     "50": 38.14,
+     "100": 41.33
+    }
+   },
+   "F1": {
+    "baseline": {
+     "20": 27.17,
+     "50": 31.22,
+     "100": 33.62
+    },
+    "rlhp": {
+     "20": 27.3,
+     "50": 31.58,
+     "100": 33.87
+    }
+   },
+   "bbox_mAP": 56.57,
+   "delta_mR50": 0.58,
+   "delta_mR100": 0.41,
+   "delta_F150": 0.36
+  }
+ ],
+ "headline": {
+  "baseline": {
+   "mR": {
+    "20": 23.28,
+    "50": 26.37,
+    "100": 28.28
+   },
+   "F1": {
+    "20": 27.17,
+    "50": 31.22,
+    "100": 33.62
+   },
+   "R": {
+    "20": 32.63,
+    "50": 38.25,
+    "100": 41.45
+   },
+   "bbox_mAP": 56.57
+  },
+  "rlhp": {
+   "mR": {
+    "20": 23.57,
+    "50": 26.95,
+    "100": 28.69
+   },
+   "F1": {
+    "20": 27.3,
+    "50": 31.58,
+    "100": 33.87
+   },
+   "R": {
+    "20": 32.43,
+    "50": 38.14,
+    "100": 41.33
+   },
+   "bbox_mAP": 56.57
+  }
+ },
+ "trajectories": {
+  "epochs": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "sgdet": [
+   {
+    "mR@20": 23.28,
+    "mR@50": 26.37,
+    "mR@100": 28.28,
+    "F1@50": 31.22,
+    "R@50": 38.25
+   },
+   {
+    "mR@20": 22.88,
+    "mR@50": 26.16,
+    "mR@100": 27.94,
+    "F1@50": 31.09,
+    "R@50": 38.3
+   },
+   {
+    "mR@20": 22.47,
+    "mR@50": 25.34,
+    "mR@100": 27.29,
+    "F1@50": 30.49,
+    "R@50": 38.27
+   },
+   {
+    "mR@20": 21.94,
+    "mR@50": 25.17,
+    "mR@100": 26.98,
+    "F1@50": 30.27,
+    "R@50": 37.95
+   },
+   {
+    "mR@20": 23.36,
+    "mR@50": 26.59,
+    "mR@100": 28.43,
+    "F1@50": 31.39,
+    "R@50": 38.29
+   },
+   {
+    "mR@20": 23.64,
+    "mR@50": 27.05,
+    "mR@100": 28.75,
+    "F1@50": 31.64,
+    "R@50": 38.09
+   }
+  ],
+  "predcls": [
+   {
+    "mR@20": 29.19,
+    "mR@50": 31.76,
+    "mR@100": 32.81,
+    "F1@50": 38.88,
+    "R@50": 50.11
+   },
+   {
+    "mR@20": 28.74,
+    "mR@50": 31.5,
+    "mR@100": 32.52,
+    "F1@50": 38.63,
+    "R@50": 49.94
+   },
+   {
+    "mR@20": 28.71,
+    "mR@50": 31.38,
+    "mR@100": 32.41,
+    "F1@50": 38.59,
+    "R@50": 50.1
+   },
+   {
+    "mR@20": 28.58,
+    "mR@50": 31.24,
+    "mR@100": 32.27,
+    "F1@50": 38.45,
+    "R@50": 49.97
+   },
+   {
+    "mR@20": 28.03,
+    "mR@50": 30.68,
+    "mR@100": 31.68,
+    "F1@50": 37.97,
+    "R@50": 49.83
+   },
+   {
+    "mR@20": 28.18,
+    "mR@50": 30.74,
+    "mR@100": 31.75,
+    "F1@50": 38.0,
+    "R@50": 49.77
+   }
+  ]
+ },
+ "per_predicate": [
+  {
+   "k": "50",
+   "classes": [
+    {
+     "id": 1,
+     "name": "over",
+     "baseline": 64.6,
+     "rlhp": 64.53,
+     "delta": -0.07
+    },
+    {
+     "id": 2,
+     "name": "in front of",
+     "baseline": 31.78,
+     "rlhp": 35.65,
+     "delta": 3.87
+    },
+    {
+     "id": 3,
+     "name": "beside",
+     "baseline": 28.57,
+     "rlhp": 34.21,
+     "delta": 5.64
+    },
+    {
+     "id": 4,
+     "name": "on",
+     "baseline": 28.7,
+     "rlhp": 28.63,
+     "delta": -0.07
+    },
+    {
+     "id": 5,
+     "name": "in",
+     "baseline": 27.46,
+     "rlhp": 26.8,
+     "delta": -0.66
+    },
+    {
+     "id": 6,
+     "name": "attached to",
+     "baseline": 25.67,
+     "rlhp": 15.43,
+     "delta": -10.24
+    },
+    {
+     "id": 7,
+     "name": "hanging from",
+     "baseline": 42.93,
+     "rlhp": 42.87,
+     "delta": -0.06
+    },
+    {
+     "id": 8,
+     "name": "on back of",
+     "baseline": 4.84,
+     "rlhp": 5.56,
+     "delta": 0.72
+    },
+    {
+     "id": 9,
+     "name": "falling off",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 10,
+     "name": "going down",
+     "baseline": 33.33,
+     "rlhp": 25.0,
+     "delta": -8.33
+    },
+    {
+     "id": 11,
+     "name": "painted on",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 12,
+     "name": "walking on",
+     "baseline": 39.46,
+     "rlhp": 34.88,
+     "delta": -4.58
+    },
+    {
+     "id": 13,
+     "name": "running on",
+     "baseline": 40.14,
+     "rlhp": 32.8,
+     "delta": -7.34
+    },
+    {
+     "id": 14,
+     "name": "crossing",
+     "baseline": 17.86,
+     "rlhp": 17.24,
+     "delta": -0.62
+    },
+    {
+     "id": 15,
+     "name": "standing on",
+     "baseline": 50.53,
+     "rlhp": 54.11,
+     "delta": 3.58
+    },
+    {
+     "id": 16,
+     "name": "lying on",
+     "baseline": 43.99,
+     "rlhp": 43.17,
+     "delta": -0.82
+    },
+    {
+     "id": 17,
+     "name": "sitting on",
+     "baseline": 44.52,
+     "rlhp": 45.18,
+     "delta": 0.66
+    },
+    {
+     "id": 18,
+     "name": "flying over",
+     "baseline": 35.62,
+     "rlhp": 35.76,
+     "delta": 0.14
+    },
+    {
+     "id": 19,
+     "name": "jumping over",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 20,
+     "name": "jumping from",
+     "baseline": 22.73,
+     "rlhp": 18.18,
+     "delta": -4.55
+    },
+    {
+     "id": 21,
+     "name": "wearing",
+     "baseline": 47.92,
+     "rlhp": 47.67,
+     "delta": -0.25
+    },
+    {
+     "id": 22,
+     "name": "holding",
+     "baseline": 51.91,
+     "rlhp": 50.02,
+     "delta": -1.89
+    },
+    {
+     "id": 23,
+     "name": "carrying",
+     "baseline": 42.81,
+     "rlhp": 41.6,
+     "delta": -1.21
+    },
+    {
+     "id": 24,
+     "name": "looking at",
+     "baseline": 25.55,
+     "rlhp": 24.2,
+     "delta": -1.35
+    },
+    {
+     "id": 25,
+     "name": "guiding",
+     "baseline": 0.0,
+     "rlhp": 12.5,
+     "delta": 12.5
+    },
+    {
+     "id": 26,
+     "name": "kissing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 27,
+     "name": "eating",
+     "baseline": 24.22,
+     "rlhp": 29.56,
+     "delta": 5.34
+    },
+    {
+     "id": 28,
+     "name": "drinking",
+     "baseline": 16.67,
+     "rlhp": 16.67,
+     "delta": 0.0
+    },
+    {
+     "id": 29,
+     "name": "feeding",
+     "baseline": 3.7,
+     "rlhp": 3.7,
+     "delta": 0.0
+    },
+    {
+     "id": 30,
+     "name": "biting",
+     "baseline": 11.11,
+     "rlhp": 28.57,
+     "delta": 17.46
+    },
+    {
+     "id": 31,
+     "name": "catching",
+     "baseline": 25.0,
+     "rlhp": 25.0,
+     "delta": 0.0
+    },
+    {
+     "id": 32,
+     "name": "picking",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 33,
+     "name": "playing with",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 34,
+     "name": "chasing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 35,
+     "name": "climbing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 36,
+     "name": "cleaning",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 37,
+     "name": "playing",
+     "baseline": 53.47,
+     "rlhp": 51.88,
+     "delta": -1.6
+    },
+    {
+     "id": 38,
+     "name": "touching",
+     "baseline": 22.37,
+     "rlhp": 15.48,
+     "delta": -6.89
+    },
+    {
+     "id": 39,
+     "name": "pushing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 40,
+     "name": "pulling",
+     "baseline": 38.1,
+     "rlhp": 33.33,
+     "delta": -4.76
+    },
+    {
+     "id": 41,
+     "name": "opening",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 42,
+     "name": "cooking",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 43,
+     "name": "talking to",
+     "baseline": 5.77,
+     "rlhp": 0.0,
+     "delta": -5.77
+    },
+    {
+     "id": 44,
+     "name": "throwing",
+     "baseline": 22.22,
+     "rlhp": 25.0,
+     "delta": 2.78
+    },
+    {
+     "id": 45,
+     "name": "slicing",
+     "baseline": 50.0,
+     "rlhp": 50.0,
+     "delta": 0.0
+    },
+    {
+     "id": 46,
+     "name": "driving",
+     "baseline": 57.14,
+     "rlhp": 59.46,
+     "delta": 2.32
+    },
+    {
+     "id": 47,
+     "name": "riding",
+     "baseline": 66.57,
+     "rlhp": 68.92,
+     "delta": 2.36
+    },
+    {
+     "id": 48,
+     "name": "parked on",
+     "baseline": 44.92,
+     "rlhp": 44.19,
+     "delta": -0.73
+    },
+    {
+     "id": 49,
+     "name": "driving on",
+     "baseline": 66.83,
+     "rlhp": 66.5,
+     "delta": -0.33
+    },
+    {
+     "id": 50,
+     "name": "about to hit",
+     "baseline": 68.42,
+     "rlhp": 73.68,
+     "delta": 5.26
+    },
+    {
+     "id": 51,
+     "name": "kicking",
+     "baseline": 66.67,
+     "rlhp": 100.0,
+     "delta": 33.33
+    },
+    {
+     "id": 52,
+     "name": "swinging",
+     "baseline": 56.0,
+     "rlhp": 59.26,
+     "delta": 3.26
+    },
+    {
+     "id": 53,
+     "name": "entering",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 54,
+     "name": "exiting",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 55,
+     "name": "enclosing",
+     "baseline": 17.42,
+     "rlhp": 16.85,
+     "delta": -0.56
+    },
+    {
+     "id": 56,
+     "name": "leaning on",
+     "baseline": 9.38,
+     "rlhp": 5.0,
+     "delta": -4.38
+    }
+   ]
+  },
+  {
+   "k": "100",
+   "classes": [
+    {
+     "id": 1,
+     "name": "over",
+     "baseline": 67.89,
+     "rlhp": 67.65,
+     "delta": -0.24
+    },
+    {
+     "id": 2,
+     "name": "in front of",
+     "baseline": 36.55,
+     "rlhp": 41.47,
+     "delta": 4.92
+    },
+    {
+     "id": 3,
+     "name": "beside",
+     "baseline": 36.22,
+     "rlhp": 41.72,
+     "delta": 5.5
+    },
+    {
+     "id": 4,
+     "name": "on",
+     "baseline": 31.78,
+     "rlhp": 31.64,
+     "delta": -0.14
+    },
+    {
+     "id": 5,
+     "name": "in",
+     "baseline": 28.2,
+     "rlhp": 27.86,
+     "delta": -0.35
+    },
+    {
+     "id": 6,
+     "name": "attached to",
+     "baseline": 29.34,
+     "rlhp": 16.49,
+     "delta": -12.86
+    },
+    {
+     "id": 7,
+     "name": "hanging from",
+     "baseline": 48.28,
+     "rlhp": 48.7,
+     "delta": 0.42
+    },
+    {
+     "id": 8,
+     "name": "on back of",
+     "baseline": 8.06,
+     "rlhp": 9.26,
+     "delta": 1.19
+    },
+    {
+     "id": 9,
+     "name": "falling off",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 10,
+     "name": "going down",
+     "baseline": 33.33,
+     "rlhp": 25.0,
+     "delta": -8.33
+    },
+    {
+     "id": 11,
+     "name": "painted on",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 12,
+     "name": "walking on",
+     "baseline": 42.7,
+     "rlhp": 37.5,
+     "delta": -5.2
+    },
+    {
+     "id": 13,
+     "name": "running on",
+     "baseline": 40.14,
+     "rlhp": 34.84,
+     "delta": -5.3
+    },
+    {
+     "id": 14,
+     "name": "crossing",
+     "baseline": 17.86,
+     "rlhp": 17.24,
+     "delta": -0.62
+    },
+    {
+     "id": 15,
+     "name": "standing on",
+     "baseline": 52.26,
+     "rlhp": 56.47,
+     "delta": 4.21
+    },
+    {
+     "id": 16,
+     "name": "lying on",
+     "baseline": 48.09,
+     "rlhp": 47.27,
+     "delta": -0.82
+    },
+    {
+     "id": 17,
+     "name": "sitting on",
+     "baseline": 48.24,
+     "rlhp": 49.18,
+     "delta": 0.94
+    },
+    {
+     "id": 18,
+     "name": "flying over",
+     "baseline": 36.6,
+     "rlhp": 36.81,
+     "delta": 0.2
+    },
+    {
+     "id": 19,
+     "name": "jumping over",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 20,
+     "name": "jumping from",
+     "baseline": 22.73,
+     "rlhp": 18.18,
+     "delta": -4.55
+    },
+    {
+     "id": 21,
+     "name": "wearing",
+     "baseline": 50.11,
+     "rlhp": 50.11,
+     "delta": 0.0
+    },
+    {
+     "id": 22,
+     "name": "holding",
+     "baseline": 55.01,
+     "rlhp": 53.29,
+     "delta": -1.73
+    },
+    {
+     "id": 23,
+     "name": "carrying",
+     "baseline": 47.65,
+     "rlhp": 45.23,
+     "delta": -2.42
+    },
+    {
+     "id": 24,
+     "name": "looking at",
+     "baseline": 28.62,
+     "rlhp": 26.49,
+     "delta": -2.13
+    },
+    {
+     "id": 25,
+     "name": "guiding",
+     "baseline": 0.0,
+     "rlhp": 12.5,
+     "delta": 12.5
+    },
+    {
+     "id": 26,
+     "name": "kissing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 27,
+     "name": "eating",
+     "baseline": 24.22,
+     "rlhp": 29.56,
+     "delta": 5.34
+    },
+    {
+     "id": 28,
+     "name": "drinking",
+     "baseline": 33.33,
+     "rlhp": 33.33,
+     "delta": 0.0
+    },
+    {
+     "id": 29,
+     "name": "feeding",
+     "baseline": 3.7,
+     "rlhp": 3.7,
+     "delta": 0.0
+    },
+    {
+     "id": 30,
+     "name": "biting",
+     "baseline": 22.22,
+     "rlhp": 28.57,
+     "delta": 6.35
+    },
+    {
+     "id": 31,
+     "name": "catching",
+     "baseline": 25.0,
+     "rlhp": 25.0,
+     "delta": 0.0
+    },
+    {
+     "id": 32,
+     "name": "picking",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 33,
+     "name": "playing with",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 34,
+     "name": "chasing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 35,
+     "name": "climbing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 36,
+     "name": "cleaning",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 37,
+     "name": "playing",
+     "baseline": 54.17,
+     "rlhp": 52.5,
+     "delta": -1.67
+    },
+    {
+     "id": 38,
+     "name": "touching",
+     "baseline": 25.0,
+     "rlhp": 17.86,
+     "delta": -7.14
+    },
+    {
+     "id": 39,
+     "name": "pushing",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 40,
+     "name": "pulling",
+     "baseline": 38.1,
+     "rlhp": 38.89,
+     "delta": 0.79
+    },
+    {
+     "id": 41,
+     "name": "opening",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 42,
+     "name": "cooking",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 43,
+     "name": "talking to",
+     "baseline": 5.77,
+     "rlhp": 2.0,
+     "delta": -3.77
+    },
+    {
+     "id": 44,
+     "name": "throwing",
+     "baseline": 22.22,
+     "rlhp": 25.0,
+     "delta": 2.78
+    },
+    {
+     "id": 45,
+     "name": "slicing",
+     "baseline": 60.0,
+     "rlhp": 50.0,
+     "delta": -10.0
+    },
+    {
+     "id": 46,
+     "name": "driving",
+     "baseline": 57.14,
+     "rlhp": 59.46,
+     "delta": 2.32
+    },
+    {
+     "id": 47,
+     "name": "riding",
+     "baseline": 67.22,
+     "rlhp": 69.55,
+     "delta": 2.33
+    },
+    {
+     "id": 48,
+     "name": "parked on",
+     "baseline": 48.34,
+     "rlhp": 47.7,
+     "delta": -0.64
+    },
+    {
+     "id": 49,
+     "name": "driving on",
+     "baseline": 67.07,
+     "rlhp": 67.24,
+     "delta": 0.17
+    },
+    {
+     "id": 50,
+     "name": "about to hit",
+     "baseline": 68.42,
+     "rlhp": 73.68,
+     "delta": 5.26
+    },
+    {
+     "id": 51,
+     "name": "kicking",
+     "baseline": 66.67,
+     "rlhp": 100.0,
+     "delta": 33.33
+    },
+    {
+     "id": 52,
+     "name": "swinging",
+     "baseline": 56.0,
+     "rlhp": 59.26,
+     "delta": 3.26
+    },
+    {
+     "id": 53,
+     "name": "entering",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 54,
+     "name": "exiting",
+     "baseline": 0.0,
+     "rlhp": 0.0,
+     "delta": 0.0
+    },
+    {
+     "id": 55,
+     "name": "enclosing",
+     "baseline": 17.98,
+     "rlhp": 18.54,
+     "delta": 0.56
+    },
+    {
+     "id": 56,
+     "name": "leaning on",
+     "baseline": 11.46,
+     "rlhp": 9.67,
+     "delta": -1.79
+    }
+   ]
+  }
+ ],
+ "pref_stats": {
+  "total_rows": 510,
+  "response_distribution": {
+   "strong preference": 376,
+   "both wrong": 134
+  },
+  "top_predicates": [
+   [
+    "beside",
+    117
+   ],
+   [
+    "attached to",
+    41
+   ],
+   [
+    "standing on",
+    38
+   ],
+   [
+    "walking on",
+    38
+   ],
+   [
+    "in front of",
+    35
+   ],
+   [
+    "driving on",
+    33
+   ],
+   [
+    "on",
+    30
+   ],
+   [
+    "parked on",
+    29
+   ],
+   [
+    "holding",
+    18
+   ],
+   [
+    "over",
+    15
+   ],
+   [
+    "looking at",
+    15
+   ],
+   [
+    "running on",
+    13
+   ]
+  ],
+  "uncertainty": {
+   "mean": 0.57,
+   "median": 0.594,
+   "min": 0.008,
+   "max": 1.0
+  },
+  "audit": {
+   "raw_feedback": 510,
+   "aggregated": 510,
+   "unique_images": 168,
+   "train": 283,
+   "validation": 93,
+   "audit_only_both_wrong": 134,
+   "pair_matching_rate": 1.0,
+   "test_leakage": 0,
+   "iou_threshold": 0.8
+  }
+ },
+ "selection_examples": [
+  {
+   "image_id": "0000_image2.jpg",
+   "top_prob": [
+    {
+     "rank": "1",
+     "subject": "person",
+     "object": "umbrella",
+     "pair": "holding / carrying",
+     "p1": 37.94,
+     "p2": 0.36,
+     "uncertainty": 1.9
+    },
+    {
+     "rank": "2",
+     "subject": "person",
+     "object": "bicycle",
+     "pair": "riding / on",
+     "p1": 16.39,
+     "p2": 0.93,
+     "uncertainty": 10.7
+    },
+    {
+     "rank": "3",
+     "subject": "bicycle",
+     "object": "road",
+     "pair": "parked on / driving on",
+     "p1": 16.03,
+     "p2": 1.6,
+     "uncertainty": 18.1
+    }
+   ],
+   "uncertainty": [
+    {
+     "rank": "1",
+     "subject": "person",
+     "object": "road",
+     "pair": "walking on / crossing",
+     "p1": 3.61,
+     "p2": 2.7,
+     "uncertainty": 85.5
+    },
+    {
+     "rank": "2",
+     "subject": "person",
+     "object": "pavement",
+     "pair": "walking on / standing on",
+     "p1": 3.54,
+     "p2": 2.13,
+     "uncertainty": 75.2
+    },
+    {
+     "rank": "3",
+     "subject": "person",
+     "object": "road",
+     "pair": "walking on / crossing",
+     "p1": 4.1,
+     "p2": 1.31,
+     "uncertainty": 48.5
+    }
+   ]
+  },
+  {
+   "image_id": "0000_0000_image2.jpg",
+   "top_prob": [
+    {
+     "rank": "1",
+     "subject": "person",
+     "object": "umbrella",
+     "pair": "holding / carrying",
+     "p1": 37.94,
+     "p2": 0.36,
+     "uncertainty": 1.9
+    },
+    {
+     "rank": "2",
+     "subject": "person",
+     "object": "bicycle",
+     "pair": "riding / on",
+     "p1": 16.39,
+     "p2": 0.93,
+     "uncertainty": 10.7
+    },
+    {
+     "rank": "3",
+     "subject": "bicycle",
+     "object": "road",
+     "pair": "parked on / driving on",
+     "p1": 16.03,
+     "p2": 1.6,
+     "uncertainty": 18.1
+    }
+   ],
+   "uncertainty": [
+    {
+     "rank": "1",
+     "subject": "person",
+     "object": "road",
+     "pair": "walking on / crossing",
+     "p1": 3.61,
+     "p2": 2.7,
+     "uncertainty": 85.5
+    },
+    {
+     "rank": "2",
+     "subject": "person",
+     "object": "pavement",
+     "pair": "walking on / standing on",
+     "p1": 3.54,
+     "p2": 2.13,
+     "uncertainty": 75.2
+    },
+    {
+     "rank": "3",
+     "subject": "person",
+     "object": "road",
+     "pair": "walking on / crossing",
+     "p1": 4.1,
+     "p2": 1.31,
+     "uncertainty": 48.5
+    }
+   ]
+  },
+  {
+   "image_id": "0000_0000_image.jpg",
+   "top_prob": [
+    {
+     "rank": "1",
+     "subject": "bicycle",
+     "object": "car",
+     "pair": "on / sitting on",
+     "p1": 57.17,
+     "p2": 0.34,
+     "uncertainty": 1.2
+    },
+    {
+     "rank": "2",
+     "subject": "person",
+     "object": "backpack",
+     "pair": "carrying / wearing",
+     "p1": 56.53,
+     "p2": 0.57,
+     "uncertainty": 2.0
+    },
+    {
+     "rank": "3",
+     "subject": "person",
+     "object": "backpack",
+     "pair": "carrying / wearing",
+     "p1": 40.4,
+     "p2": 0.55,
+     "uncertainty": 2.7
+    }
+   ],
+   "uncertainty": [
+    {
+     "rank": "1",
+     "subject": "person",
+     "object": "car",
+     "pair": "beside / sitting on",
+     "p1": 2.19,
+     "p2": 1.1,
+     "uncertainty": 66.7
+    },
+    {
+     "rank": "2",
+     "subject": "person",
+     "object": "fence",
+     "pair": "beside / in front of",
+     "p1": 2.98,
+     "p2": 0.57,
+     "uncertainty": 32.1
+    },
+    {
+     "rank": "3",
+     "subject": "person",
+     "object": "backpack",
+     "pair": "carrying / wearing",
+     "p1": 56.53,
+     "p2": 0.57,
+     "uncertainty": 2.0
+    }
+   ]
+  },
+  {
+   "image_id": "scene_graph_tool/test_images/107907.jpg",
+   "top_prob": [
+    {
+     "rank": "1",
+     "subject": "sky",
+     "object": "tree",
+     "pair": "over / on",
+     "p1": 12.03,
+     "p2": 0.07,
+     "uncertainty": 1.1
+    },
+    {
+     "rank": "2",
+     "subject": "sky",
+     "object": "tree",
+     "pair": "over / on",
+     "p1": 5.32,
+     "p2": 0.02,
+     "uncertainty": 0.8
+    },
+    {
+     "rank": "3",
+     "subject": "sky",
+     "object": "grass",
+     "pair": "over / on",
+     "p1": 4.58,
+     "p2": 0.01,
+     "uncertainty": 0.6
+    }
+   ],
+   "uncertainty": [
+    {
+     "rank": "1",
+     "subject": "bench",
+     "object": "grass",
+     "pair": "on / beside",
+     "p1": 1.33,
+     "p2": 0.03,
+     "uncertainty": 4.2
+    },
+    {
+     "rank": "2",
+     "subject": "sky",
+     "object": "tree",
+     "pair": "over / on",
+     "p1": 12.03,
+     "p2": 0.07,
+     "uncertainty": 1.1
+    },
+    {
+     "rank": "3",
+     "subject": "sky",
+     "object": "grass",
+     "pair": "over / on",
+     "p1": 4.58,
+     "p2": 0.01,
+     "uncertainty": 0.6
+    }
+   ]
+  }
+ ],
+ "demo_samples": [
+  {
+   "image_id": "1592907.jpg",
+   "subject": {
+    "label": "person",
+    "score": 77.2,
+    "box": [
+     562.3,
+     232.6,
+     600.7,
+     292.9
+    ]
+   },
+   "object": {
+    "label": "person",
+    "score": 80.7,
+    "box": [
+     457.3,
+     251.3,
+     528.2,
+     310.3
+    ]
+   },
+   "candidates": [
+    {
+     "name": "beside",
+     "p": 0.41
+    },
+    {
+     "name": "talking to",
+     "p": 0.4
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.992,
+   "relative_margin": 0.008
+  },
+  {
+   "image_id": "1592635.jpg",
+   "subject": {
+    "label": "boat",
+    "score": 90.6,
+    "box": [
+     114.8,
+     81.7,
+     387.7,
+     355.0
+    ]
+   },
+   "object": {
+    "label": "wall",
+    "score": 66.4,
+    "box": [
+     0.0,
+     371.8,
+     639.2,
+     480.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "leaning on",
+     "p": 0.08
+    },
+    {
+     "name": "beside",
+     "p": 0.08
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.99,
+   "relative_margin": 0.01
+  },
+  {
+   "image_id": "1592871.jpg",
+   "subject": {
+    "label": "dining table",
+    "score": 74.4,
+    "box": [
+     390.7,
+     239.3,
+     479.8,
+     430.1
+    ]
+   },
+   "object": {
+    "label": "wall",
+    "score": 82.8,
+    "box": [
+     18.0,
+     0.1,
+     480.0,
+     327.1
+    ]
+   },
+   "candidates": [
+    {
+     "name": "beside",
+     "p": 0.02
+    },
+    {
+     "name": "in front of",
+     "p": 0.02
+    }
+   ],
+   "human_choice": "strong preference: in front of",
+   "uncertainty": 0.99,
+   "relative_margin": 0.01
+  },
+  {
+   "image_id": "1592914.jpg",
+   "subject": {
+    "label": "sea",
+    "score": 94.2,
+    "box": [
+     0.0,
+     210.7,
+     640.0,
+     479.6
+    ]
+   },
+   "object": {
+    "label": "sand",
+    "score": 79.6,
+    "box": [
+     0.7,
+     160.5,
+     639.7,
+     259.9
+    ]
+   },
+   "candidates": [
+    {
+     "name": "attached to",
+     "p": 0.15
+    },
+    {
+     "name": "beside",
+     "p": 0.15
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.99,
+   "relative_margin": 0.01
+  },
+  {
+   "image_id": "1592920.jpg",
+   "subject": {
+    "label": "person",
+    "score": 88.2,
+    "box": [
+     153.6,
+     222.7,
+     282.1,
+     475.3
+    ]
+   },
+   "object": {
+    "label": "playingfield",
+    "score": 83.9,
+    "box": [
+     0.0,
+     176.1,
+     426.0,
+     639.5
+    ]
+   },
+   "candidates": [
+    {
+     "name": "standing on",
+     "p": 11.67
+    },
+    {
+     "name": "running on",
+     "p": 11.91
+    }
+   ],
+   "human_choice": "strong preference: standing on",
+   "uncertainty": 0.99,
+   "relative_margin": 0.01
+  },
+  {
+   "image_id": "1592827.jpg",
+   "subject": {
+    "label": "bus",
+    "score": 90.9,
+    "box": [
+     315.6,
+     194.9,
+     600.9,
+     315.3
+    ]
+   },
+   "object": {
+    "label": "road",
+    "score": 65.4,
+    "box": [
+     0.0,
+     267.8,
+     640.0,
+     365.3
+    ]
+   },
+   "candidates": [
+    {
+     "name": "driving on",
+     "p": 23.07
+    },
+    {
+     "name": "parked on",
+     "p": 22.53
+    }
+   ],
+   "human_choice": "strong preference: driving on",
+   "uncertainty": 0.988,
+   "relative_margin": 0.012
+  },
+  {
+   "image_id": "1592773.jpg",
+   "subject": {
+    "label": "person",
+    "score": 85.2,
+    "box": [
+     391.7,
+     158.2,
+     456.9,
+     314.3
+    ]
+   },
+   "object": {
+    "label": "snow",
+    "score": 90.3,
+    "box": [
+     2.0,
+     96.6,
+     640.0,
+     427.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "going down",
+     "p": 0.5
+    },
+    {
+     "name": "standing on",
+     "p": 0.48
+    }
+   ],
+   "human_choice": "strong preference: standing on",
+   "uncertainty": 0.985,
+   "relative_margin": 0.015
+  },
+  {
+   "image_id": "1592729.jpg",
+   "subject": {
+    "label": "person",
+    "score": 88.4,
+    "box": [
+     228.4,
+     94.0,
+     392.1,
+     477.0
+    ]
+   },
+   "object": {
+    "label": "wall",
+    "score": 74.6,
+    "box": [
+     0.4,
+     0.2,
+     638.1,
+     457.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "in front of",
+     "p": 0.06
+    },
+    {
+     "name": "leaning on",
+     "p": 0.06
+    }
+   ],
+   "human_choice": "strong preference: in front of",
+   "uncertainty": 0.983,
+   "relative_margin": 0.017
+  },
+  {
+   "image_id": "1592908.jpg",
+   "subject": {
+    "label": "train",
+    "score": 91.2,
+    "box": [
+     235.8,
+     89.4,
+     639.7,
+     382.8
+    ]
+   },
+   "object": {
+    "label": "building",
+    "score": 63.3,
+    "box": [
+     0.2,
+     0.3,
+     633.1,
+     221.9
+    ]
+   },
+   "candidates": [
+    {
+     "name": "in front of",
+     "p": 0.13
+    },
+    {
+     "name": "beside",
+     "p": 0.09
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.849,
+   "relative_margin": 0.151
+  },
+  {
+   "image_id": "1592657.jpg",
+   "subject": {
+    "label": "person",
+    "score": 87.3,
+    "box": [
+     356.7,
+     70.2,
+     503.6,
+     402.8
+    ]
+   },
+   "object": {
+    "label": "refrigerator",
+    "score": 95.6,
+    "box": [
+     499.2,
+     81.5,
+     640.0,
+     474.2
+    ]
+   },
+   "candidates": [
+    {
+     "name": "looking at",
+     "p": 0.22
+    },
+    {
+     "name": "beside",
+     "p": 0.3
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.848,
+   "relative_margin": 0.152
+  },
+  {
+   "image_id": "1592730.jpg",
+   "subject": {
+    "label": "person",
+    "score": 91.7,
+    "box": [
+     0.0,
+     66.6,
+     162.9,
+     421.0
+    ]
+   },
+   "object": {
+    "label": "person",
+    "score": 90.7,
+    "box": [
+     142.2,
+     44.2,
+     379.5,
+     421.2
+    ]
+   },
+   "candidates": [
+    {
+     "name": "beside",
+     "p": 1.34
+    },
+    {
+     "name": "attached to",
+     "p": 0.98
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.844,
+   "relative_margin": 0.156
+  },
+  {
+   "image_id": "1592831.jpg",
+   "subject": {
+    "label": "bicycle",
+    "score": 90.6,
+    "box": [
+     0.0,
+     271.9,
+     186.7,
+     416.8
+    ]
+   },
+   "object": {
+    "label": "tree",
+    "score": 75.3,
+    "box": [
+     49.4,
+     0.0,
+     381.9,
+     262.3
+    ]
+   },
+   "candidates": [
+    {
+     "name": "beside",
+     "p": 0.02
+    },
+    {
+     "name": "in front of",
+     "p": 0.02
+    }
+   ],
+   "human_choice": "strong preference: in front of",
+   "uncertainty": 0.84,
+   "relative_margin": 0.16
+  },
+  {
+   "image_id": "1592890.jpg",
+   "subject": {
+    "label": "elephant",
+    "score": 92.4,
+    "box": [
+     194.0,
+     228.5,
+     367.8,
+     432.6
+    ]
+   },
+   "object": {
+    "label": "dirt",
+    "score": 65.9,
+    "box": [
+     0.6,
+     267.8,
+     640.0,
+     479.6
+    ]
+   },
+   "candidates": [
+    {
+     "name": "walking on",
+     "p": 14.01
+    },
+    {
+     "name": "standing on",
+     "p": 10.03
+    }
+   ],
+   "human_choice": "strong preference: standing on",
+   "uncertainty": 0.834,
+   "relative_margin": 0.166
+  },
+  {
+   "image_id": "1592878.jpg",
+   "subject": {
+    "label": "wall-wood",
+    "score": 97.5,
+    "box": [
+     0.0,
+     164.4,
+     426.9,
+     593.3
+    ]
+   },
+   "object": {
+    "label": "tree",
+    "score": 89.0,
+    "box": [
+     0.4,
+     1.8,
+     427.0,
+     185.9
+    ]
+   },
+   "candidates": [
+    {
+     "name": "beside",
+     "p": 0.0
+    },
+    {
+     "name": "in front of",
+     "p": 0.0
+    }
+   ],
+   "human_choice": "strong preference: in front of",
+   "uncertainty": 0.831,
+   "relative_margin": 0.169
+  },
+  {
+   "image_id": "1592749.jpg",
+   "subject": {
+    "label": "motorcycle",
+    "score": 93.9,
+    "box": [
+     25.4,
+     9.1,
+     617.4,
+     472.3
+    ]
+   },
+   "object": {
+    "label": "motorcycle",
+    "score": 66.3,
+    "box": [
+     531.5,
+     12.5,
+     640.0,
+     112.4
+    ]
+   },
+   "candidates": [
+    {
+     "name": "in front of",
+     "p": 0.08
+    },
+    {
+     "name": "beside",
+     "p": 0.11
+    }
+   ],
+   "human_choice": "strong preference: beside",
+   "uncertainty": 0.83,
+   "relative_margin": 0.17
+  },
+  {
+   "image_id": "1592850.jpg",
+   "subject": {
+    "label": "person",
+    "score": 79.5,
+    "box": [
+     88.6,
+     92.6,
+     138.8,
+     316.7
+    ]
+   },
+   "object": {
+    "label": "pavement",
+    "score": 71.7,
+    "box": [
+     0.0,
+     245.6,
+     500.0,
+     340.9
+    ]
+   },
+   "candidates": [
+    {
+     "name": "standing on",
+     "p": 6.45
+    },
+    {
+     "name": "walking on",
+     "p": 4.57
+    }
+   ],
+   "human_choice": "strong preference: standing on",
+   "uncertainty": 0.83,
+   "relative_margin": 0.17
+  },
+  {
+   "image_id": "1592693.jpg",
+   "subject": {
+    "label": "sky",
+    "score": 94.3,
+    "box": [
+     0.0,
+     0.3,
+     639.7,
+     321.5
+    ]
+   },
+   "object": {
+    "label": "grass",
+    "score": 81.8,
+    "box": [
+     0.1,
+     302.8,
+     640.0,
+     480.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "over",
+     "p": 3.35
+    },
+    {
+     "name": "on",
+     "p": 0.03
+    }
+   ],
+   "human_choice": "strong preference: over",
+   "uncertainty": 0.02,
+   "relative_margin": 0.98
+  },
+  {
+   "image_id": "1592724.jpg",
+   "subject": {
+    "label": "chair",
+    "score": 74.3,
+    "box": [
+     154.5,
+     251.5,
+     213.6,
+     313.2
+    ]
+   },
+   "object": {
+    "label": "rug",
+    "score": 74.6,
+    "box": [
+     53.9,
+     302.7,
+     477.1,
+     479.8
+    ]
+   },
+   "candidates": [
+    {
+     "name": "on",
+     "p": 0.91
+    },
+    {
+     "name": "over",
+     "p": 0.01
+    }
+   ],
+   "human_choice": "strong preference: on",
+   "uncertainty": 0.02,
+   "relative_margin": 0.98
+  },
+  {
+   "image_id": "1592601.jpg",
+   "subject": {
+    "label": "sky",
+    "score": 94.4,
+    "box": [
+     0.2,
+     0.2,
+     640.0,
+     359.9
+    ]
+   },
+   "object": {
+    "label": "tree",
+    "score": 82.6,
+    "box": [
+     61.1,
+     214.7,
+     639.8,
+     406.6
+    ]
+   },
+   "candidates": [
+    {
+     "name": "on",
+     "p": 0.04
+    },
+    {
+     "name": "over",
+     "p": 4.65
+    }
+   ],
+   "human_choice": "strong preference: over",
+   "uncertainty": 0.015,
+   "relative_margin": 0.985
+  },
+  {
+   "image_id": "1592615.jpg",
+   "subject": {
+    "label": "tv",
+    "score": 89.9,
+    "box": [
+     289.7,
+     156.0,
+     393.3,
+     243.6
+    ]
+   },
+   "object": {
+    "label": "table",
+    "score": 77.8,
+    "box": [
+     10.2,
+     231.8,
+     624.2,
+     463.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "over",
+     "p": 0.12
+    },
+    {
+     "name": "on",
+     "p": 17.01
+    }
+   ],
+   "human_choice": "strong preference: on",
+   "uncertainty": 0.015,
+   "relative_margin": 0.985
+  },
+  {
+   "image_id": "1592913.jpg",
+   "subject": {
+    "label": "sky",
+    "score": 92.9,
+    "box": [
+     0.0,
+     0.0,
+     640.0,
+     202.4
+    ]
+   },
+   "object": {
+    "label": "truck",
+    "score": 89.8,
+    "box": [
+     153.7,
+     229.3,
+     577.4,
+     435.3
+    ]
+   },
+   "candidates": [
+    {
+     "name": "on",
+     "p": 0.05
+    },
+    {
+     "name": "over",
+     "p": 9.2
+    }
+   ],
+   "human_choice": "strong preference: over",
+   "uncertainty": 0.011,
+   "relative_margin": 0.989
+  },
+  {
+   "image_id": "1592638.jpg",
+   "subject": {
+    "label": "cake",
+    "score": 80.0,
+    "box": [
+     267.4,
+     442.7,
+     336.3,
+     495.1
+    ]
+   },
+   "object": {
+    "label": "dining table",
+    "score": 93.2,
+    "box": [
+     0.7,
+     199.7,
+     479.9,
+     640.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "on",
+     "p": 1.51
+    },
+    {
+     "name": "over",
+     "p": 0.01
+    }
+   ],
+   "human_choice": "strong preference: on",
+   "uncertainty": 0.01,
+   "relative_margin": 0.99
+  },
+  {
+   "image_id": "1592638.jpg",
+   "subject": {
+    "label": "cake",
+    "score": 69.8,
+    "box": [
+     186.8,
+     574.7,
+     247.6,
+     640.0
+    ]
+   },
+   "object": {
+    "label": "dining table",
+    "score": 93.2,
+    "box": [
+     0.7,
+     199.7,
+     479.9,
+     640.0
+    ]
+   },
+   "candidates": [
+    {
+     "name": "over",
+     "p": 0.01
+    },
+    {
+     "name": "on",
+     "p": 2.16
+    }
+   ],
+   "human_choice": "strong preference: on",
+   "uncertainty": 0.009,
+   "relative_margin": 0.991
+  },
+  {
+   "image_id": "1592813.jpg",
+   "subject": {
+    "label": "dining table",
+    "score": 80.0,
+    "box": [
+     322.2,
+     376.3,
+     417.2,
+     466.7
+    ]
+   },
+   "object": {
+    "label": "pavement",
+    "score": 64.1,
+    "box": [
+     0.2,
+     406.3,
+     480.0,
+     639.8
+    ]
+   },
+   "candidates": [
+    {
+     "name": "enclosing",
+     "p": 0.0
+    },
+    {
+     "name": "on",
+     "p": 1.02
+    }
+   ],
+   "human_choice": "strong preference: on",
+   "uncertainty": 0.008,
+   "relative_margin": 0.992
+  }
+ ],
+ "assets": [
+  "qualitative_comparison_grid.png",
+  "qualitative_sample1_beside_107910.png",
+  "qualitative_sample1_standing_on_107912.png",
+  "qualitative_sample2_in_front_of_107915.png",
+  "qualitative_sample2_standing_on_107912.png",
+  "qualitative_sample3_beside_107912.png",
+  "qualitative_sample3_beside_1159300.png",
+  "qualitative_sample4_beside_1159360.png",
+  "qualitative_sample4_in_front_of_107915.png",
+  "qualitative_sample4_in_front_of_1159633.png",
+  "qualitative_sample5_beside_1159300.png",
+  "qualitative_sample5_in_front_of_1159633.png",
+  "qualitative_sample6_beside_1160193.png",
+  "qualitative_sample6_in_front_of_1159633.png",
+  "qualitative_single_relations_grid.png",
+  "evaluation_comparison.png",
+  "training_curves.png",
+  "preference_class_distribution.png",
+  "predicate_improvements.png",
+  "sgg_epochs_mR_curve.png",
+  "GUI_image.png",
+  "retention_loss_explosion.png",
+  "uncertainty_pairs_distribution.png"
+ ]
+}

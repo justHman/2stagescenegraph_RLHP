@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RLHP Demo — Human Preference Alignment for SGG</title>
+<script src="vendor/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2d3748;
+  --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149;
+  --amber:#d29922; --purple:#bc8cff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.5}
+.container{max-width:1280px;margin:0 auto;padding:0 24px 80px}
+header{padding:40px 0 8px}
+h1{font-size:1.7rem;font-weight:700}
+h1 .hl{color:var(--accent)}
+.subtitle{color:var(--muted);margin-top:6px;font-size:.95rem}
+.badges{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.badge{background:var(--panel2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.78rem;color:var(--muted)}
+.badge b{color:var(--text)}
+nav{display:flex;gap:6px;margin:28px 0 20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+nav button{background:none;border:none;color:var(--muted);padding:10px 16px;font-size:.9rem;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+nav button:hover{color:var(--text)}
+section.tab{display:none}
+section.tab.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:18px 0}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card .label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.card .value{font-size:1.6rem;font-weight:700;margin-top:4px}
+.card .delta{font-size:.8rem;margin-top:2px}
+.up{color:var(--green)} .down{color:var(--red)} .flat{color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 0}
+.panel h3{font-size:1rem;margin-bottom:12px}
+.panel p.desc{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:9px 12px;text-align:center;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.4px}
+td:first-child,th:first-child{text-align:left}
+tr:hover td{background:var(--panel2)}
+td.pos{color:var(--green);font-weight:600}
+td.neg{color:var(--red);font-weight:600}
+.chart-box{position:relative;height:340px}
+.chart-box.tall{height:420px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.gallery figure{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .15s}
+.gallery figure:hover{transform:translateY(-3px)}
+.gallery img{width:100%;display:block}
+.gallery figcaption{padding:10px 12px;font-size:.78rem;color:var(--muted)}
+.gallery figcaption b{color:var(--text)}
+#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;align-items:center;justify-content:center;flex-direction:column;padding:20px}
+#lightbox img{max-width:95%;max-height:88vh;border-radius:6px}
+#lightbox .cap{color:var(--muted);margin-top:10px;font-size:.85rem}
+#lightbox .close{position:absolute;top:16px;right:24px;font-size:2rem;cursor:pointer;color:#fff}
+/* annotation demo */
+.demo-stage{display:grid;grid-template-columns:380px 1fr;gap:20px}
+@media(max-width:900px){.demo-stage{grid-template-columns:1fr}}
+.canvas-wrap{background:#0a0e14;border:1px solid var(--border);border-radius:10px;padding:10px}
+.canvas-wrap canvas{width:100%;display:block;border-radius:6px}
+.pair-info{font-size:.85rem}
+.cand{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;margin:10px 0;cursor:pointer;transition:border-color .15s,background .15s}
+.cand:hover{border-color:var(--accent)}
+.cand.selected{border-color:var(--green);background:rgba(63,185,80,.08)}
+.cand .pname{font-weight:700;font-size:1.05rem}
+.cand .pprob{color:var(--muted);font-size:.8rem}
+.probbar{height:8px;background:var(--border);border-radius:4px;margin-top:8px;overflow:hidden}
+.probbar div{height:100%;background:var(--accent);border-radius:4px}
+.btnrow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.85rem;font-family:inherit}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:#0d1117;border-color:var(--accent);font-weight:600}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.meta-line{color:var(--muted);font-size:.78rem;margin-top:6px}
+.stat-inline{display:flex;gap:18px;margin:10px 0;color:var(--muted);font-size:.82rem;flex-wrap:wrap}
+.stat-inline b{color:var(--text)}
+.kbd{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:.75rem;font-family:monospace}
+.score-log{margin-top:8px;max-height:180px;overflow-y:auto;font-size:.8rem}
+.score-log .entry{padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.notice{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.4);border-radius:8px;padding:10px 14px;font-size:.8rem;color:var(--amber);margin:12px 0}
+.footer{color:var(--muted);font-size:.78rem;margin-top:40px;border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <h1>🎯 RLHP Demo — <span class="hl">Human Preference Alignment</span> cho Two-Stage Scene Graph Generation</h1>
+  <div class="subtitle">YOLO12m-REACT++ trên Panoptic Scene Graphs (PSG) · Bradley-Terry + Masked KL Retention + Prototype Anchoring</div>
+  <div class="badges" id="badges"></div>
+</header>
+
+<nav id="nav">
+  <button data-tab="overview" class="active">📊 Benchmark</button>
+  <button data-tab="ablation">🧪 Ablation</button>
+  <button data-tab="predicates">🏷️ Theo Predicate</button>
+  <button data-tab="epochs">📈 Epochs</button>
+  <button data-tab="prefdata">🗂️ Dữ liệu Preference</button>
+  <button data-tab="qualitative">🖼️ Qualitative</button>
+  <button data-tab="annotate">🎮 Annotation Demo</button>
+  <button data-tab="liveann">🖊️ Live Annotation</button>
+  <button data-tab="live">🔴 Live Model</button>
+</nav>
+
+<!-- ============ OVERVIEW ============ -->
+<section class="tab active" id="tab-overview">
+  <div class="cards" id="headline-cards"></div>
+  <div class="panel">
+    <h3>Bảng so sánh: Baseline vs Full RLHP — PSG test SGDet (2,177 ảnh)</h3>
+    <p class="desc">Số liệu đọc trực tiếp từ <code>eval_summary.json</code> của run <code>preference3_tuned_anchor_ret20_tau01</code>. Bbox mAP bất biến 56.57% do Stage 1 (YOLO12m) bị đóng băng.</p>
+    <div id="compare-table"></div>
+  </div>
+  <div class="grid2">
+    <div class="panel"><h3>mR@K — Baseline vs Full RLHP</h3><div class="chart-box"><canvas id="chart-mr"></canvas></div></div>
+    <div class="panel"><h3>F1@K — Baseline vs Full RLHP</h3><div class="chart-box"><canvas id="chart-f1"></canvas></div></div>
+  </div>
+  <div class="notice">💡 Cách đọc: mR (Mean Recall) là trung bình recall trên từng class — metric chính để đánh giá tail classes. RLHP cải thiện mR@50 +0.57 điểm (+2.18% tương đối) mà không phá vỡ kiến thức head classes (R@50 chỉ giảm 0.11).</div>
+</section>
+
+<!-- ============ ABLATION ============ -->
+<section class="tab" id="tab-ablation">
+  <div class="panel">
+    <h3>4-way Loss Ablation (SGDet, mỗi run so với baseline riêng)</h3>
+    <p class="desc">Δ = candidate − baseline trong cùng setting. Full RLHP là cấu hình duy nhất cải thiện đồng thời mR và F1.</p>
+    <div id="ablation-table"></div>
+  </div>
+  <div class="panel">
+    <h3>ΔmR@50 so với baseline tương ứng</h3>
+    <div class="chart-box"><canvas id="chart-ablation"></canvas></div>
+  </div>
+  <div class="notice">⚠️ Pure Preference (không regularizer) gây <b>catastrophic semantic drift</b>: mR@50 giảm mạnh (−5.09 điểm) dù học tốt các cặp được annotate — cho thấy nhu cầu KL retention + prototype anchor.</div>
+</section>
+
+<!-- ============ PREDICATES ============ -->
+<section class="tab" id="tab-predicates">
+  <div class="panel">
+    <h3>Recall theo từng predicate class (SGDet, so sánh @K)</h3>
+    <p class="desc">Chọn cutoff K, sắp xếp theo mức cải thiện. Điểm xanh = RLHP tốt hơn baseline, đỏ = giảm.</p>
+    <div class="btnrow" id="k-selector" style="margin-bottom:14px">
+      <button class="btn active" data-k="50">K = 50</button>
+      <button class="btn" data-k="100">K = 100</button>
+      <label style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.82rem;margin-left:12px">
+        Top <input id="topn" type="number" value="20" min="5" max="56" style="width:60px;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px">
+        class có thay đổi lớn nhất
+      </label>
+    </div>
+    <div class="chart-box tall"><canvas id="chart-pred"></canvas></div>
+    <div id="pred-table" style="margin-top:18px"></div>
+  </div>
+</section>
+
+<!-- ============ EPOCHS ============ -->
+<section class="tab" id="tab-epochs">
+  <div class="panel">
+    <h3>Quá trình fine-tune theo epoch (Full RLHP)</h3>
+    <p class="desc">Epoch 0 = baseline gốc trước khi alignment. SGDet trái, PredCls phải.</p>
+    <div class="grid2">
+      <div class="chart-box"><canvas id="chart-ep-sgdet"></canvas></div>
+      <div class="chart-box"><canvas id="chart-ep-predcls"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PREF DATA ============ -->
+<section class="tab" id="tab-prefdata">
+  <div class="cards" id="pref-cards"></div>
+  <div class="grid2">
+    <div class="panel"><h3>Phân bố phản hồi của annotator</h3><div class="chart-box"><canvas id="chart-resp"></canvas></div></div>
+    <div class="panel"><h3>Top predicate được human chọn</h3><div class="chart-box tall"><canvas id="chart-predfreq"></canvas></div></div>
+  </div>
+  <div class="panel">
+    <h3>Uncertainty vs Top-Probability selection (Table 1)</h3>
+    <p class="desc">Uncertainty-priority chọn các cặp có margin nhỏ (p1−p2)/(p1+p2) → câu hỏi informative hơn cho annotator (mean uncertainty 0.476 vs 0.223).</p>
+    <div id="selection-examples"></div>
+  </div>
+</section>
+
+<!-- ============ QUALITATIVE ============ -->
+<section class="tab" id="tab-qualitative">
+  <div class="panel">
+    <h3>So sánh định tính: Baseline (trên) vs RLHP Aligned (dưới)</h3>
+    <p class="desc">Nhấn vào ảnh để phóng to. Baseline hay collapse về các predicate generic (touching, on...), RLHP dự đoán semantic phù hợp hơn (beside, in front of...).</p>
+  </div>
+  <div class="gallery" id="gallery"></div>
+</section>
+
+<!-- ============ ANNOTATE DEMO ============ -->
+<section class="tab" id="tab-annotate">
+  <div class="notice">🎮 Mô phỏng giao diện thu thập preference thật của toolkit (fastapi + React). Dữ liệu lấy từ các record thật trong <code>scene_graph_preferences3.csv</code> — vẽ sơ đồ bounding box theo toạ độ thật, kèm xác suất model thật. Phím tắt: <span class="kbd">1</span> <span class="kbd">2</span> chọn candidate · <span class="kbd">0</span> tie · <span class="kbd">N</span> next.</div>
+  <div class="demo-stage">
+    <div>
+      <div class="canvas-wrap"><canvas id="pair-canvas" width="760" height="520"></canvas></div>
+      <div class="stat-inline" id="pair-meta"></div>
+    </div>
+    <div class="pair-info">
+      <h3 style="margin-bottom:4px">Cặp quan hệ nào đúng hơn?</h3>
+      <div class="meta-line" id="pair-context"></div>
+      <div id="candidate-list"></div>
+      <div class="btnrow">
+        <button class="btn" id="btn-tie">🤝 Tie (0)</button>
+        <button class="btn primary" id="btn-next" disabled>Next ▸ (N)</button>
+      </div>
+      <div class="meta-line" id="undo-line" style="margin-top:10px"><button class="btn" id="btn-undo">↩ Undo (Z)</button></div>
+      <h3 style="margin-top:18px">Log phiên (<span id="log-count">0</span> câu trả lời)</h3>
+      <div class="score-log" id="log"></div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  Nguồn dữ liệu: checkpoint & runs tải từ <a style="color:var(--accent)" href="https://drive.google.com/drive/folders/1CRyhpJNsR1Ht4Kay5SEpRqtrl-uTk-Bw">Google Drive của repo</a> · Paper: "Human Preference Alignment for Two-Stage Scene Graph Generation: YOLO12m-REACT++ on Panoptic Scene Graphs" (Phan Quoc Anh, 2026) · Repo: 2stagescenegraph_RLHP
+</div>
+</div>
+
+<!-- ============ LIVE ANNOTATION ============ -->
+<section class="tab" id="tab-liveann">
+  <div class="notice">🖊️ <b>Active annotation thật</b> — đúng pipeline của toolkit: model chạy trên ảnh thật → uncertainty selector chọn các cặp subject→object có margin nhỏ nhất giữa 2 predicate (<code>Δ=(p1−p2)/(p1+p2)</code>) → bạn chọn predicate đúng. Mỗi lựa chọn được ghi vào <code>annotations.csv</code> (cùng cấu trúc với <code>scene_graph_preferences3.csv</code>). Phím: <span class="kbd">1</span> <span class="kbd">2</span> chọn · <span class="kbd">0</span> tie · <span class="kbd">X</span> both wrong · <span class="kbd">S</span> skip · <span class="kbd">N</span> next · <span class="kbd">Z</span> undo.</div>
+  <div class="panel">
+    <div class="btnrow" style="margin-bottom:14px">
+      <select id="ann-sample" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-size:.85rem;max-width:300px"></select>
+      <select id="ann-model" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-size:.85rem">
+        <option value="baseline">Baseline model</option>
+        <option value="rlhp">RLHP-aligned model</option>
+      </select>
+      <label style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.8rem">Top-M cặp
+        <input id="ann-topm" type="number" value="6" min="3" max="15" style="width:55px;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px"></label>
+      <button class="btn primary" id="ann-load">⟳ Load candidates</button>
+      <label class="btn" style="display:inline-flex;align-items:center;gap:6px">📤 Ảnh khác<input type="file" id="ann-file" accept="image/*" style="display:none"></label>
+      <span id="ann-status" style="color:var(--muted);font-size:.82rem"></span>
+    </div>
+    <div class="demo-stage">
+      <div>
+        <div class="canvas-wrap"><img id="ann-img" style="width:100%;display:none;border-radius:6px"></div>
+        <div class="stat-inline" id="ann-meta"></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:2px">Cặp quan hệ nào đúng hơn?</h3>
+        <div class="meta-line" id="ann-progress"></div>
+        <div id="ann-cands"></div>
+        <div class="btnrow">
+          <button class="btn" id="ann-tie">🤝 Tie (0)</button>
+          <button class="btn" id="ann-bothwrong">❌ Both wrong (X)</button>
+          <button class="btn" id="ann-skip">⏭ Skip (S)</button>
+          <button class="btn" id="ann-undo">↩ Undo (Z)</button>
+        </div>
+        <h3 style="margin-top:16px">Phiên làm việc — <span id="ann-count">0</span> annotation đã lưu</h3>
+        <div class="score-log" id="ann-log"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE MODEL ============ -->
+<section class="tab" id="tab-live">
+  <div class="notice">🔴 <b>Inference thật với 2 model</b>: <span style="color:var(--red)">Baseline REACT++</span> vs <span style="color:var(--green)">RLHP-aligned</span> (YOLO12m, PSG, ONNX — weights RLHP được patch từ <code>best_candidate.pth</code>). Ảnh lấy từ <b>PSG test set thật</b> (HuggingFace) hoặc upload ảnh bất kỳ. Backend: <code>live_demo/server.py</code>.</div>
+  <div class="panel">
+    <div class="btnrow" style="margin-bottom:14px">
+      <select id="live-sample" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-size:.85rem;max-width:340px"></select>
+      <button class="btn primary" id="live-run">▶ So sánh 2 model</button>
+      <label class="btn" style="display:inline-flex;align-items:center;gap:6px">📤 Upload ảnh<input type="file" id="live-file" accept="image/*" style="display:none"></label>
+      <span style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.8rem">rel_conf
+        <input id="live-relconf" type="number" value="0.05" step="0.01" min="0.01" max="0.5" style="width:70px;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px"></span>
+      <span id="live-status" style="color:var(--muted);font-size:.82rem"></span>
+    </div>
+    <div class="grid2" id="live-grid">
+      <div>
+        <h3 style="margin-bottom:8px;color:var(--red)">Baseline (best_model.pth)</h3>
+        <div class="canvas-wrap"><img id="live-img-baseline" style="width:100%;display:none;border-radius:6px"></div>
+        <div class="stat-inline" id="live-meta-baseline"></div>
+        <div id="live-rels-baseline" style="max-height:420px;overflow-y:auto"></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:8px;color:var(--green)">RLHP-aligned (best_candidate.pth)</h3>
+        <div class="canvas-wrap"><img id="live-img-rlhp" style="width:100%;display:none;border-radius:6px"></div>
+        <div class="stat-inline" id="live-meta-rlhp"></div>
+        <div id="live-rels-rlhp" style="max-height:420px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div id="live-placeholder" style="color:var(--muted);font-size:.9rem;padding:40px;text-align:center">Chọn ảnh từ PSG test set rồi bấm "So sánh 2 model" — hoặc upload ảnh của bạn</div>
+  </div>
+</section>
+
+<div id="lightbox"><span class="close">✕</span><img id="lb-img"><div class="cap" id="lb-cap"></div></div>
+
+<script>
+const ACCENT='#58a6ff', GREEN='#3fb950', RED='#f85149', AMBER='#d29922', PURPLE='#bc8cff', MUTED='#8b949e', BORDER='#2d3748';
+Chart.defaults.color='#8b949e'; Chart.defaults.borderColor=BORDER; Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+let D=null; // demo data
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+
+fetch('demo_data.json').then(r=>r.json()).then(d=>{D=d; init();});
+
+function init(){
+  // badges
+  const m=D.meta;
+  $('#badges').innerHTML=[
+    `Benchmark: <b>${m.benchmark}</b>`, `Protocol: <b>${m.protocol}</b>`,
+    `λ<sub>KL</sub>=<b>${m.lambda_kl}</b>`, `λ<sub>proto</sub>=<b>${m.lambda_proto}</b>`, `τ=<b>${m.tau}</b>`,
+    `mR@50: <b>${D.headline.baseline.mR['50']}% → ${D.headline.rlhp.mR['50']}%</b>`
+  ].map(t=>`<span class="badge">${t}</span>`).join('');
+
+  renderHeadline(); renderCompareTable(); renderCharts();
+  renderAblation(); renderPredicates('50'); renderEpochs();
+  renderPrefData(); renderSelection(); renderGallery(); initAnnotate(); initLive(); initLiveAnn();
+}
+
+/* ---------- Live Annotation (real model) ---------- */
+let annCands=[], annIdx=0, annLogs=[], annSession=null, annCur=null;
+function initLiveAnn(){
+  const sel=$('#ann-sample');
+  fetch(API+'/api/samples').then(r=>r.json()).then(d=>{
+    (d.samples||[]).forEach(f=>{const o=document.createElement('option');o.value=f;o.textContent=f;sel.appendChild(o)});
+    $('#ann-status').textContent='backend OK';
+  }).catch(()=>{$('#ann-status').textContent='⚠️ backend chưa chạy'});
+  $('#ann-load').onclick=()=>loadAnnCands();
+  $('#ann-file').onchange=e=>{ if(e.target.files[0]) loadAnnCands(e.target.files[0]); };
+  $('#ann-tie').onclick=()=>annAnswer('tie');
+  $('#ann-bothwrong').onclick=()=>annAnswer('both_wrong');
+  $('#ann-skip').onclick=()=>annNext();
+  $('#ann-undo').onclick=annUndo;
+  fetch(API+'/api/annotations').then(r=>r.json()).then(d=>{
+    $('#ann-count').textContent=d.total||0;
+  }).catch(()=>{});
+  document.addEventListener('keydown',e=>{
+    if(!$('#tab-liveann').classList.contains('active'))return;
+    if(e.key==='1')annPickDisplay(0); if(e.key==='2')annPickDisplay(1);
+    if(e.key==='0')annAnswer('tie'); if(e.key==='x'||e.key==='X')annAnswer('both_wrong');
+    if(e.key==='s'||e.key==='S')annNext(); if(e.key==='z'||e.key==='Z')annUndo();
+  });
+}
+async function loadAnnCands(file){
+  const status=$('#ann-status');
+  status.textContent='⏳ model đang chạy...';
+  const fd=new FormData();
+  fd.append('top_m', $('#ann-topm').value||'6');
+  fd.append('model', $('#ann-model').value);
+  if(file){ fd.append('file', file); fd.append('image_name', file.name); }
+  else { fd.append('image_name', $('#ann-sample').value); }
+  try{
+    const r=await fetch(API+'/api/annotate/candidates',{method:'POST',body:fd});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    annCands=d.candidates; annIdx=0; annSession=d.session_id||('session_'+Date.now());
+    status.textContent=`✓ ${d.candidates.length} cặp từ ${d.n_boxes} boxes (forward ${d.infer_ms} ms)`;
+    $('#ann-img').src=''; $('#ann-meta').innerHTML=`<span>Ảnh: <b>${d.image_name}</b></span><span>Model: <b>${d.model}</b></span>`;
+    annShow();
+  }catch(e){ status.textContent='❌ '+e.message; }
+}
+function annShow(){
+  const c=annCands[annIdx];
+  if(!c){ $('#ann-cands').innerHTML='<div style="color:var(--muted);font-size:.85rem;padding:20px 0">Hết cặp — chọn ảnh khác hoặc tăng Top-M.</div>'; $('#ann-img').removeAttribute('src'); return; }
+  annCur=c;
+  // shuffled display order to avoid position bias (như toolkit)
+  annDisplayOrder = Math.random()<0.5 ? [c.cand_a,c.cand_b] : [c.cand_b,c.cand_a];
+  $('#ann-img').src=c.overlay; $('#ann-img').style.display='block';
+  $('#ann-progress').textContent=`Cặp ${annIdx+1}/${annCands.length} · uncertainty U=${c.uncertainty} (margin Δ=${c.relative_margin}) · hiển thị ngẫu nhiên`;
+  $('#ann-cands').innerHTML=annDisplayOrder.map((cd,i)=>`
+    <div class="cand" id="ann-cand-${i}" onclick="annPickDisplay(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="pname">${i+1}. ${cd.name}</span><span class="pprob">p=${cd.p}%</span>
+      </div>
+      <div class="probbar"><div style="width:${Math.max(1.5,Math.min(100,cd.p))}%"></div></div>
+      <div class="meta-line">${c.subject.label} → ${cd.name} → ${c.object.label}</div>
+    </div>`).join('');
+}
+window.annPickDisplay=function(i){ annAnswer(annDisplayOrder[i].name); };
+async function annAnswer(choice){
+  const c=annCur; if(!c)return;
+  const payload={
+    session_id: annSession, image_name: $('#ann-sample').value || annSession,
+    model: $('#ann-model').value,
+    subject_label: c.subject.label, subject_score: c.subject.score, subject_box: JSON.stringify(c.subject.box),
+    object_label: c.object.label, object_score: c.object.score, object_box: JSON.stringify(c.object.box),
+    predicate_1_id: c.cand_a.id, predicate_1_name: c.cand_a.name, predicate_1_probability: c.cand_a.p,
+    predicate_2_id: c.cand_b.id, predicate_2_name: c.cand_b.name, predicate_2_probability: c.cand_b.p,
+    display_order: annDisplayOrder[0]===c.cand_a ? 'a_first' : 'b_first',
+    choice: choice, uncertainty_score: c.uncertainty, relative_margin: c.relative_margin,
+  };
+  try{
+    const r=await fetch(API+'/api/annotate/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const d=await r.json();
+    $('#ann-count').textContent=d.total;
+    annLogs.push({pair:`${c.subject.label} → ${c.object.label}`,a:c.cand_a.name,b:c.cand_b.name,choice});
+    const e=annLogs[annLogs.length-1];
+    $('#ann-log').insertAdjacentHTML('afterbegin',`<div class="entry"><span>#${d.total} · ${e.pair}</span><span class="up">${e.choice==='tie'?'TIE':e.choice==='both_wrong'?'✗':e.choice}</span></div>`);
+    annNext();
+  }catch(e){ $('#ann-status').textContent='❌ lưu lỗi: '+e.message; }
+}
+function annNext(){ annIdx++; annShow(); }
+function annUndo(){
+  if(annIdx===0)return;
+  annIdx--; annShow();
+}
+
+/* ---------- Live model ---------- */
+const API = location.port === '8081' ? '' : 'http://127.0.0.1:8081';
+function initLive(){
+  const sel = $('#live-sample');
+  fetch(API + '/api/samples').then(r=>r.json()).then(d=>{
+    (d.samples||[]).forEach(f=>{
+      const o=document.createElement('option'); o.value=f; o.textContent=f; sel.appendChild(o);
+    });
+    $('#live-status').textContent = `backend OK · ${d.samples.length} ảnh PSG test`;
+  }).catch(()=>{ $('#live-status').textContent='⚠️ không kết nối được backend (chạy live_demo/server.py)'; });
+  $('#live-run').onclick=()=>runLive();
+  $('#live-file').onchange=e=>{ if(e.target.files[0]) runLive(e.target.files[0]); };
+}
+async function runLive(file){
+  const status=$('#live-status');
+  status.textContent='⏳ đang chạy inference (2 model)...';
+  $('#live-placeholder').style.display='none';
+  const fd=new FormData();
+  fd.append('rel_conf', $('#live-relconf').value||'0.05');
+  fd.append('box_conf', '0.4');
+  fd.append('compare', 'true');
+  if(file){ fd.append('file', file); }
+  else{
+    const name=$('#live-sample').value;
+    if(!name){ status.textContent='⚠️ chưa chọn ảnh'; return; }
+    fd.append('image_name', name);
+  }
+  try{
+    const t0=performance.now();
+    const r=await fetch(API+'/api/predict',{method:'POST',body:fd});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    status.textContent=`✓ xong (${((performance.now()-t0)/1000).toFixed(2)}s)`;
+    for(const w of ['baseline','rlhp']){
+      const v=d[w];
+      $(`#live-img-${w}`).src=v.overlay; $(`#live-img-${w}`).style.display='block';
+      $(`#live-meta-${w}`).innerHTML=`<span>Forward: <b>${v.infer_ms} ms</b></span><span>${v.boxes.length} objects · ${v.relations.length} relations</span>`;
+      const rels=[...v.relations].sort((a,b)=>b.triplet_score-a.triplet_score).slice(0,15);
+      $(`#live-rels-${w}`).innerHTML=rels.map(rel=>{
+        const s=v.boxes[rel.subject], o=v.boxes[rel.object];
+        return `<div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin:6px 0;font-size:.82rem;display:flex;justify-content:space-between;gap:8px">
+          <span><b style="color:var(--accent)">${s?s.label:'?'}</b> → <b style="color:var(--purple)">${rel.predicate}</b> → <b style="color:var(--amber)">${o?o.label:'?'}</b></span>
+          <span style="color:var(--muted)">${rel.triplet_score.toFixed(3)}</span></div>`;
+      }).join('') || '<div style="color:var(--muted);font-size:.85rem">Không có relation nào — thử giảm rel_conf.</div>';
+    }
+    if(d.diff){
+      $('#live-meta-baseline').innerHTML += `<span style="color:var(--muted)">triplets chung: ${d.diff.common} · chỉ baseline: ${d.diff.baseline_only} · chỉ RLHP: ${d.diff.rlhp_only}</span>`;
+    }
+  }catch(e){ status.textContent='❌ lỗi: '+e.message; }
+}
+
+/* ---------- Overview ---------- */
+function renderHeadline(){
+  const b=D.headline.baseline, r=D.headline.rlhp;
+  const delta=(a,c)=>{const d=c-a; return `<div class="delta ${d>0?'up':d<0?'down':'flat'}">${d>0?'+':''}${d.toFixed(2)} điểm (${d>0?'+':''}${(100*(c-a)/a).toFixed(2)}%)</div>`};
+  const card=(label,val,d)=>`<div class="card"><div class="label">${label}</div><div class="value">${val}%</div>${d||''}</div>`;
+  $('#headline-cards').innerHTML =
+    card('mR@50 (Baseline → RLHP)', r.mR['50'], delta(b.mR['50'], r.mR['50'])) +
+    card('mR@100', r.mR['100'], delta(b.mR['100'], r.mR['100'])) +
+    card('F1@50', r.F1['50'], delta(b.F1['50'], r.F1['50'])) +
+    card('bbox mAP (Stage 1)', r.bbox_mAP, `<div class="delta flat">bất biến ✓ (detector frozen)</div>`);
+}
+
+function renderCompareTable(){
+  const b=D.headline.baseline, r=D.headline.rlhp;
+  const rows=[];
+  for(const k of ['20','50','100']){
+    rows.push(row(`Mean Recall @${k}`, b.mR[k], r.mR[k]));
+    rows.push(row(`Recall @${k}`, b.R[k], r.R[k]));
+    rows.push(row(`F1 @${k}`, b.F1[k], r.F1[k]));
+  }
+  rows.push(`<tr><td>bbox mAP</td><td>${b.bbox_mAP}</td><td>${r.bbox_mAP}</td><td class="flat">0.00</td></tr>`);
+  function row(name,x,y){const d=y-x;return `<tr><td>${name}</td><td>${x}</td><td>${y}</td><td class="${d>=0?'pos':'neg'}">${d>=0?'+':''}${d.toFixed(2)}</td></tr>`}
+  $('#compare-table').innerHTML=`<table><thead><tr><th>Metric</th><th>Baseline YOLO12m-REACT++</th><th>Full RLHP (Tuned)</th><th>Δ tuyệt đối</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+}
+
+function renderCharts(){
+  const b=D.headline.baseline, r=D.headline.rlhp, ks=['20','50','100'];
+  const mk=(id,bl,rl,title)=>new Chart($(id),{type:'bar',data:{labels:ks.map(k=>title.replace('K',k)),datasets:[
+    {label:'Baseline',data:ks.map(k=>bl[k]),backgroundColor:'#3b4a63',borderRadius:6},
+    {label:'Full RLHP',data:ks.map(k=>rl[k]),backgroundColor:ACCENT,borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:false,min:Math.min(...ks.map(k=>bl[k]))-4,max:Math.max(...ks.map(k=>rl[k]))+3,title:{display:true,text:'%'}}}}});
+  mk('#chart-mr',b.mR,r.mR,'mR@K'); mk('#chart-f1',b.F1,r.F1,'F1@K');
+}
+
+/* ---------- Ablation ---------- */
+function renderAblation(){
+  const rows=D.benchmark.map(m=>{
+    const cells=[]; let allPos=true;
+    for(const [g,metric] of [['mR','mR'],['F1','F1']]){
+      for(const k of ['20','50','100']){
+        const d=m[metric].rlhp[k]-m[metric].baseline[k];
+        if(d<=0) allPos=false;
+        cells.push(`<td class="${d>0?'pos':d<0?'neg':'flat'}">${m[metric].baseline[k]} → ${m[metric].rlhp[k]} (${d>0?'+':''}${d.toFixed(2)})</td>`);
+      }
+    }
+    const name = m.name==='Full RLHP (Tuned)'? `<b>${m.name} ⭐</b>` : m.name;
+    return `<tr><td>${name}</td>${cells.join('')}<td>${m.bbox_mAP}</td></tr>`;
+  });
+  $('#ablation-table').innerHTML=`<table><thead><tr><th>Configuration</th><th>mR@20</th><th>mR@50</th><th>mR@100</th><th>F1@20</th><th>F1@50</th><th>F1@100</th><th>bbox mAP</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+
+  new Chart($('#chart-ablation'),{type:'bar',data:{
+    labels:D.benchmark.map(m=>m.name),
+    datasets:[{label:'ΔmR@50',data:D.benchmark.map(m=>m.delta_mR50),backgroundColor:D.benchmark.map(m=>m.delta_mR50>=0?GREEN:RED),borderRadius:6}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'điểm %'}}}}});
+}
+
+/* ---------- Predicates ---------- */
+let predChart=null, curK='50';
+function renderPredicates(k){
+  curK=k;
+  const entry=D.per_predicate.find(p=>p.k===k);
+  const topN=parseInt($('#topn').value)||20;
+  const sorted=[...entry.classes].sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,topN);
+  new Chart(document.getElementById('chart-pred').getContext('2d'), {type:'bar',data:{
+    labels:sorted.map(c=>c.name),
+    datasets:[
+      {label:'Baseline',data:sorted.map(c=>c.baseline),backgroundColor:'#3b4a63',borderRadius:4},
+      {label:'Full RLHP',data:sorted.map(c=>c.rlhp),backgroundColor:sorted.map(c=>c.delta>=0?GREEN:RED),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'bottom'}},scales:{x:{title:{display:true,text:'Recall %'}}}}});
+
+  const rows=sorted.map(c=>`<tr><td>${c.name}</td><td>${c.baseline}</td><td>${c.rlhp}</td><td class="${c.delta>=0?'pos':'neg'}">${c.delta>=0?'+':''}${c.delta}</td></tr>`).join('');
+  const improved=entry.classes.filter(c=>c.delta>0).length, worsened=entry.classes.filter(c=>c.delta<0).length;
+  $('#pred-table').innerHTML=`<p class="desc" style="margin-bottom:8px">Tổng quan @${k}: <b class="up">${improved} classes cải thiện</b> · <b class="neg">${worsened} classes giảm</b> · ${entry.classes.length - improved - worsened} không đổi</p>
+  <table><thead><tr><th>Predicate</th><th>Baseline recall %</th><th>RLHP recall %</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+$$('#k-selector .btn').forEach(b=>b.onclick=()=>{$$('#k-selector .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderPredicates(b.dataset.k)});
+$('#topn').onchange=()=>renderPredicates(curK);
+
+/* ---------- Epochs ---------- */
+function renderEpochs(){
+  const mk=(id,rows,title)=>new Chart($(id),{type:'line',data:{
+    labels:D.trajectories.epochs,
+    datasets:[
+      {label:'mR@20',data:rows.map(r=>r['mR@20']),borderColor:AMBER,tension:.3},
+      {label:'mR@50',data:rows.map(r=>r['mR@50']),borderColor:ACCENT,tension:.3,borderWidth:2.5},
+      {label:'mR@100',data:rows.map(r=>r['mR@100']),borderColor:PURPLE,tension:.3},
+      {label:'F1@50',data:rows.map(r=>r['F1@50']),borderColor:GREEN,borderDash:[6,4],tension:.3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:title,color:'#e6edf3'}},scales:{y:{title:{display:true,text:'%'}}}}});
+  mk('#chart-ep-sgdet',D.trajectories.sgdet,'SGDet');
+  mk('#chart-ep-predcls',D.trajectories.predcls,'PredCls');
+}
+
+/* ---------- Preference data ---------- */
+function renderPrefData(){
+  const a=D.pref_stats.audit, u=D.pref_stats.uncertainty;
+  const card=(l,v,s)=>`<div class="card"><div class="label">${l}</div><div class="value">${v}</div><div class="delta flat">${s||''}</div></div>`;
+  $('#pref-cards').innerHTML =
+    card('Feedback thô (CSV)', a.raw_feedback, '510 records thu thập qua GUI')+
+    card('Cặp dùng được cho training', a.aggregated-a.audit_only_both_wrong, `${a.train} train / ${a.validation} val`) +
+    card('Ảnh unique (PSG train)', a.unique_images, 'zero leakage sang PSG test ✓')+
+    card('Uncertainty trung bình', u.mean, `median ${u.median} · [${u.min}–${u.max}]`);
+
+  const rd=D.pref_stats.response_distribution;
+  new Chart($('#chart-resp'),{type:'doughnut',data:{labels:Object.keys(rd),datasets:[{data:Object.values(rd),backgroundColor:[GREEN,ACCENT,AMBER,RED,PURPLE,'#3b4a63']}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+
+  const tf=D.pref_stats.top_predicates;
+  new Chart($('#chart-predfreq'),{type:'bar',data:{labels:tf.map(x=>x[0]),datasets:[{label:'# lần được chọn',data:tf.map(x=>x[1]),backgroundColor:PURPLE,borderRadius:6}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+}
+
+function renderSelection(){
+  $('#selection-examples').innerHTML=D.selection_examples.map(ex=>`
+    <div style="margin-bottom:18px"><b style="font-size:.85rem">${ex.image_id}</b>
+    <div class="grid2" style="margin-top:8px">
+      ${[['Top-Probability',ex.top_prob],['Uncertainty-Priority',ex.uncertainty]].map(([t,rows])=>`
+      <div style="background:var(--panel2);border-radius:8px;padding:10px">
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:6px">${t}</div>
+        <table style="font-size:.76rem"><tbody>${rows.map(r=>`<tr><td style="text-align:left">${r.subject} → ${r.object}</td><td>${r.pair}</td><td class="${r.uncertainty>40?'pos':''}">U=${r.uncertainty}%</td></tr>`).join('')}</tbody></table>
+      </div>`).join('')}
+    </div></div>`).join('');
+}
+
+/* ---------- Qualitative ---------- */
+function renderGallery(){
+  const figs=D.assets.filter(n=>n.startsWith('qualitative_sample')).sort();
+  $('#gallery').innerHTML=figs.map(f=>{
+    const m=f.match(/qualitative_sample(\d+)_(.+?)_(\d+)\.png/);
+    return `<figure data-f="${f}"><img loading="lazy" src="assets/${f}" alt="${f}">
+      <figcaption><b>Sample ${m?m[1]:'?'}</b> — predicate: <b>${m?m[2]:''}</b> · ảnh PSG #${m?m[3]:''}<br>Trên: Baseline · Dưới: RLHP aligned</figcaption></figure>`;
+  }).join('');
+  $$('#gallery figure').forEach(f=>f.onclick=()=>{
+    $('#lb-img').src=`assets/${f.dataset.f}`;
+    $('#lb-cap').textContent=f.querySelector('figcaption').textContent;
+    $('#lightbox').style.display='flex';
+  });
+  $('#lightbox .close').onclick=()=>$('#lightbox').style.display='none';
+  $('#lightbox').onclick=e=>{if(e.target.id==='lightbox')$('#lightbox').style.display='none'};
+}
+
+/* ---------- Annotation demo ---------- */
+let samples=[], idx=0, choice=null, log=[];
+function initAnnotate(){
+  samples=D.demo_samples;
+  drawSample();
+  document.addEventListener('keydown',e=>{
+    if(!$('#tab-annotate').classList.contains('active'))return;
+    if(e.key==='1')selectCand(0); if(e.key==='2')selectCand(1);
+    if(e.key==='0')tie(); if(e.key==='n'||e.key==='N')next();
+    if(e.key==='z'||e.key==='Z')undo();
+  });
+  $('#btn-tie').onclick=tie; $('#btn-next').onclick=next; $('#btn-undo').onclick=undo;
+}
+function drawSample(){
+  const s=samples[idx]; if(!s)return;
+  choice=null; $('#btn-next').disabled=true;
+  $$('.cand').forEach(c=>c.classList.remove('selected'));
+  $('#pair-context').textContent=`Ảnh PSG #${s.image_id} · relative margin Δ=${s.relative_margin} · uncertainty U=${s.uncertainty}`;
+  $('#pair-meta').innerHTML=`<span>Subject: <b>${s.subject.label}</b> (${s.subject.score}%)</span><span>Object: <b>${s.object.label}</b> (${s.object.score}%)</span><span>Nguồn: preference CSV thật</span>`;
+  $('#candidate-list').innerHTML=s.candidates.map((c,i)=>`
+    <div class="cand" data-i="${i}" onclick="selectCand(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="pname">${i+1}. ${c.name}</span><span class="pprob">p=${c.p}%</span>
+      </div>
+      <div class="probbar"><div style="width:${Math.max(2,c.p)}%"></div></div>
+    </div>`).join('');
+  drawBoxes(s);
+}
+function drawBoxes(s){
+  const cv=$('#pair-canvas'), ctx=cv.getContext('2d');
+  ctx.fillStyle='#0a0e14'; ctx.fillRect(0,0,cv.width,cv.height);
+  // schematic background grid
+  ctx.strokeStyle='rgba(255,255,255,.04)';
+  for(let x=0;x<cv.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.stroke()}
+  for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.stroke()}
+  // map real coords into canvas
+  const W=640,H=360; // PSG standard
+  const sc=Math.min((cv.width-40)/W,(cv.height-60)/H);
+  const ox=(cv.width-W*sc)/2, oy=(cv.height-H*sc)/2+10;
+  const box=(b,color,label,score)=>{
+    const x=ox+b[0]*sc,y=oy+b[1]*sc,w=(b[2]-b[0])*sc,h=(b[3]-b[1])*sc;
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.strokeRect(x,y,w,h);
+    ctx.fillStyle=color;ctx.font='bold 13px Segoe UI';
+    const t=`${label} · ${score}%`;const tw=ctx.measureText(t).width+10;
+    ctx.fillRect(x,Math.max(0,y-20),tw,20);
+    ctx.fillStyle='#0d1117';ctx.fillText(t,x+5,Math.max(14,y-6));
+  };
+  box(s.object.box,'#bc8cff',s.object.label,s.object.score);
+  box(s.subject.box,'#58a6ff','← '+s.subject.label,s.subject.score);
+  // relation arrow
+  const sb=s.subject.box,ob=s.object.box;
+  const sx=ox+(sb[0]+sb[2])/2*sc, sy=oy+(sb[1]+sb[3])/2*sc;
+  const ex=ox+(ob[0]+ob[2])/2*sc, ey=oy+(ob[1]+ob[3])/2*sc;
+  ctx.strokeStyle='rgba(63,185,80,.7)';ctx.lineWidth=2;ctx.setLineDash([6,5]);
+  ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(ex,ey);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='rgba(63,185,80,.9)';ctx.font='12px Segoe UI';
+  ctx.fillText(`(${s.subject.label} → ${s.object.label})`,(sx+ex)/2+8,(sy+ey)/2-8);
+  ctx.fillStyle='#8b949e';ctx.font='11px Segoe UI';
+  ctx.fillText('Sơ đồ toạ độ box thật (ảnh gốc không kèm trong checkpoint)',12,cv.height-10);
+}
+window.selectCand=function(i){
+  choice=i; $$('.cand').forEach(c=>c.classList.toggle('selected',+c.dataset.i===i));
+  $('#btn-next').disabled=false;
+};
+function tie(){choice='tie';$$('.cand').forEach(c=>c.classList.remove('selected'));$('#btn-next').disabled=false;}
+function next(){
+  const s=samples[idx]; if(!s||choice===null)return;
+  const chosen = choice==='tie'?'TIE [0.5, 0.5]':s.candidates[choice].name;
+  log.push({img:s.image_id,pair:`${s.subject.label} → ${s.object.label}`,a:s.candidates[0].name,b:s.candidates[1].name,chosen});
+  $('#log-count').textContent=log.length;
+  const e=log[log.length-1];
+  $('#log').insertAdjacentHTML('afterbegin',`<div class="entry"><span>#${log.length} · ${e.pair}</span><span class="up">${e.chosen}</span></div>`);
+  idx=(idx+1)%samples.length; drawSample();
+}
+function undo(){if(!log.length)return;log.pop();$('#log-count').textContent=log.length;const first=$('#log .entry');if(first)first.remove();idx=(idx-1+samples.length)%samples.length;drawSample();}
+
+/* ---------- Tabs ---------- */
+$$('#nav button').forEach(b=>b.onclick=()=>{
+  $$('#nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  $$('section.tab').forEach(t=>t.classList.remove('active'));
+  $('#tab-'+b.dataset.tab).classList.add('active');
+});
+</script>
+</body>
+</html>

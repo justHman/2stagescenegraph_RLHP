@@ -1,0 +1,6 @@
+schema_version,session_id,answer_created_at,image_name,model,subject_label,subject_score,subject_box,object_label,object_score,object_box,predicate_1_id,predicate_1_name,predicate_1_probability,predicate_2_id,predicate_2_name,predicate_2_probability,display_order,choice,uncertainty_score,relative_margin
+1,session_1794587697419,2026-11-13T16:35:22.392250+00:00,107907.jpg,baseline,house,0.056,"[18.9,169.6,440.5,267.7]",tree,0.904,"[0.2,0.1,640,345.2]",3,beside,0.17,2,in front of,0.17,a_first,beside,0.995,0.005
+1,session_1794587739437,2026-11-13T16:35:50.240983+00:00,107907.jpg,baseline,house,0.056,"[18.9,169.6,440.5,267.7]",tree,0.904,"[0.2,0.1,640,345.2]",3,beside,0.17,2,in front of,0.17,a_first,beside,0.995,0.005
+1,session_1794587739437,2026-11-13T16:36:03.224348+00:00,107907.jpg,baseline,tree,0.904,"[0.2,0.1,640,345.2]",wall-brick,0.053,"[24.9,157.7,640.6,270.9]",2,in front of,0.05,3,beside,0.04,a_first,in front of,0.939,0.061
+1,session_1794587739437,2026-11-13T16:36:05.968047+00:00,107907.jpg,baseline,tree,0.904,"[0.2,0.1,640,345.2]",building,0.097,"[26.6,173.5,427.6,266.9]",2,in front of,0.58,3,beside,0.49,a_first,in front of,0.922,0.078
+1,session_1794587739437,2026-11-13T16:36:16.124278+00:00,107907.jpg,baseline,bench,0.827,"[422.8,294.6,474.5,356.2]",tree,0.904,"[0.2,0.1,640,345.2]",2,in front of,0.2,3,beside,0.16,b_first,beside,0.911,0.089
